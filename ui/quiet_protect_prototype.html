@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet Protect — Family Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #eeece7;
+    --bg-info: #e6f1fb;
+    --bg-success: #e1f5ee;
+    --bg-warning: #faeeda;
+    --bg-danger: #faece7;
+    --text-primary: #2c2c2a;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --text-info: #185fa5;
+    --text-success: #0f6e56;
+    --text-warning: #854f0b;
+    --text-danger: #993c1d;
+    --border-subtle: rgba(44,44,42,0.12);
+    --border-mid: rgba(44,44,42,0.22);
+    --border-info: rgba(24,95,165,0.3);
+    --teal: #1d9e75;
+    --coral: #d85a30;
+    --amber: #ef9f27;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  body { font-family: var(--font); background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+
+  /* TOPBAR */
+  .topbar { background: var(--bg-primary); border-bottom: 0.5px solid var(--border-subtle); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .logo { font-size: 15px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.3px; display: flex; align-items: center; gap: 6px; }
+  .logo-shield { width: 20px; height: 20px; background: var(--teal); border-radius: 3px 3px 10px 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-shield-inner { width: 9px; height: 9px; background: white; border-radius: 2px 2px 5px 5px; }
+  .protect-badge { font-size: 10px; font-weight: 600; background: #e1f5ee; color: #0f6e56; padding: 2px 8px; border-radius: 10px; }
+  .account-pill { font-size: 11px; color: var(--text-secondary); background: var(--bg-secondary); border: 0.5px solid var(--border-subtle); border-radius: 20px; padding: 3px 10px; cursor: pointer; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .agent-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.45;transform:scale(0.8)} }
+  .last-run { font-size: 11px; color: var(--text-tertiary); }
+
+  /* PROTECTED BANNER */
+  .protected-banner { background: #e1f5ee; border-bottom: 0.5px solid #9fe1cb; padding: 8px 1.5rem; display: flex; align-items: center; gap: 10px; }
+  .pb-icon { width: 28px; height: 28px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .pb-icon svg { width: 14px; height: 14px; fill: white; }
+  .pb-text { font-size: 12px; color: #0f6e56; }
+  .pb-text strong { font-weight: 600; }
+  .pb-link { font-size: 11px; color: #0f6e56; margin-left: auto; cursor: pointer; text-decoration: underline; }
+
+  /* SUMMARY BAR */
+  .summary-bar { background: var(--bg-primary); border-bottom: 0.5px solid var(--border-subtle); padding: 0 1.5rem; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 12px 1.5rem 12px 0; border-right: 0.5px solid var(--border-subtle); margin-right: 1.5rem; }
+  .stat:last-child { border-right: none; margin-right: 0; }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 3px; }
+  .stat-value { font-size: 22px; font-weight: 600; }
+  .v-safe { color: var(--teal); }
+  .v-blocked { color: var(--coral); }
+  .v-suppressed { color: var(--text-tertiary); }
+  .v-alerts { color: #ba7517; }
+
+  /* TAB BAR */
+  .tab-bar { background: var(--bg-primary); border-bottom: 0.5px solid var(--border-subtle); padding: 0 1.5rem; display: flex; }
+  .tab { font-size: 13px; padding: 10px 16px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; transition: all 0.15s; margin-bottom: -0.5px; }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 600; }
+
+  /* MAIN */
+  .main { padding: 1.25rem 1.5rem; max-width: 900px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 1.5rem; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+  .section-count { font-size: 11px; color: var(--text-tertiary); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-safe { background: var(--teal); }
+  .dot-blocked { background: var(--coral); }
+  .dot-warn { background: #ba7517; }
+  .dot-sup { background: #b4b2a9; }
+
+  /* CARDS */
+  .card { background: var(--bg-primary); border: 0.5px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 6px; display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: start; cursor: pointer; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--border-mid); }
+  .card.blocked-card { border-left: 2px solid var(--coral); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+  .card.safe-card { border-left: 2px solid var(--teal); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .av-red { background: #faece7; color: #993c1d; }
+  .av-blue { background: #e6f1fb; color: #185fa5; }
+  .av-teal { background: #e1f5ee; color: #0f6e56; }
+  .av-gray { background: #f1efe8; color: #5f5e5a; }
+  .av-amber { background: #faeeda; color: #854f0b; }
+  .av-green { background: #eaf3de; color: #3b6d11; }
+
+  .card-body { min-width: 0; }
+  .card-from { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .card-subject { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-preview { font-size: 12px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .card-time { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+
+  /* BADGES */
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+  .b-blocked { background: #faece7; color: #993c1d; }
+  .b-safe { background: #e1f5ee; color: #0f6e56; }
+  .b-warn { background: #faeeda; color: #854f0b; }
+  .b-sup { background: #f1efe8; color: #5f5e5a; }
+  .b-scam { background: #d85a30; color: #fff; }
+  .b-trusted { background: #e1f5ee; color: #0f6e56; }
+
+  /* THREAT BOX */
+  .threat-box { background: #faece7; border-radius: var(--radius-md); padding: 10px 12px; margin-top: 8px; display: none; }
+  .threat-title { font-size: 11px; font-weight: 600; color: #993c1d; margin-bottom: 4px; }
+  .threat-signals { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .threat-signal { font-size: 10px; background: #f5c4b3; color: #712b13; padding: 2px 7px; border-radius: 8px; }
+  .threat-note { margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+
+  /* ACTION ROW */
+  .action-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; display: none; }
+  .btn { font-size: 11px; padding: 5px 11px; border-radius: 6px; border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); transition: background 0.12s; }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn.deliver { background: #e1f5ee; border-color: #9fe1cb; color: #0f6e56; }
+  .btn.deliver:hover { background: #c8f0e0; }
+  .btn.danger { border-color: #f5c4b3; color: #993c1d; }
+  .btn.danger:hover { background: #faece7; }
+
+  /* AGENT NOTE */
+  .agent-note { display: flex; align-items: flex-start; gap: 8px; padding: 9px 12px; background: var(--bg-secondary); border-radius: var(--radius-md); margin: 4px 0 8px 56px; }
+  .agent-note-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* TRUSTED ROWS */
+  .trusted-row { background: var(--bg-primary); border: 0.5px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 11px 16px; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; }
+  .trusted-row:hover { border-color: var(--border-mid); }
+  .trusted-name { font-size: 13px; font-weight: 600; color: var(--text-primary); flex: 1; }
+  .trusted-email { font-size: 11px; color: var(--text-tertiary); margin-top: 1px; }
+  .trusted-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+
+  /* DIGEST BOX */
+  .digest-box { background: var(--bg-primary); border: 0.5px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.25rem; }
+  .digest-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 10px; border-bottom: 0.5px solid var(--border-subtle); }
+  .digest-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .digest-date { font-size: 11px; color: var(--text-tertiary); }
+  .digest-quote { font-size: 13px; color: #0f6e56; line-height: 1.7; font-style: italic; background: #e1f5ee; padding: 12px 16px; border-left: 3px solid var(--teal); border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 1rem; }
+  .digest-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1rem; }
+  .digest-stat { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 10px; text-align: center; }
+  .digest-stat-n { font-size: 20px; font-weight: 600; }
+  .digest-stat-l { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+  .digest-section-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; padding-top: 12px; border-top: 0.5px solid var(--border-subtle); margin-top: 0; }
+  .scam-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .scam-item-badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 8px; background: #faece7; color: #993c1d; flex-shrink: 0; margin-top: 1px; }
+  .scam-item-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* SETTINGS */
+  .settings-group-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.4px; margin: 1.25rem 0 0.6rem; }
+  .settings-group-label:first-child { margin-top: 0; }
+  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 0.5px solid var(--border-subtle); }
+  .settings-label { font-size: 13px; color: var(--text-primary); }
+  .settings-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .toggle { width: 36px; height: 20px; border-radius: 10px; background: var(--teal); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+  .toggle::after { content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%; background: white; top: 2px; right: 2px; transition: right 0.2s; }
+  .toggle.off { background: var(--border-mid); }
+  .toggle.off::after { right: 18px; }
+  .threshold-value { font-size: 13px; font-weight: 600; color: var(--coral); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">
+      <div class="logo-shield"><div class="logo-shield-inner"></div></div>
+      Quiet
+    </div>
+    <div class="protect-badge">Protect</div>
+    <div class="account-pill">Managing: Dad's inbox ▾</div>
+  </div>
+  <div class="topbar-right">
+    <div class="agent-status"><div class="pulse"></div>Protection active</div>
+    <div class="last-run">Last scan: 3 min ago</div>
+  </div>
+</div>
+
+<div class="protected-banner">
+  <div class="pb-icon">
+    <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/></svg>
+  </div>
+  <div class="pb-text">
+    <strong>Geoffrey's inbox is protected.</strong> He sees only safe, delivered emails. Everything else is handled here.
+  </div>
+  <div class="pb-link">View Geoffrey's inbox</div>
+</div>
+
+<div class="summary-bar">
+  <div class="stat"><div class="stat-label">Delivered safely this week</div><div class="stat-value v-safe">12</div></div>
+  <div class="stat"><div class="stat-label">Blocked (scams / threats)</div><div class="stat-value v-blocked">4</div></div>
+  <div class="stat"><div class="stat-label">Suppressed (noise)</div><div class="stat-value v-suppressed">83</div></div>
+  <div class="stat"><div class="stat-label">Scam alerts sent</div><div class="stat-value v-alerts">2</div></div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab('blocked',this)">Blocked <span style="font-size:11px;color:#888780;font-weight:400">4</span></div>
+  <div class="tab" onclick="showTab('delivered',this)">Delivered <span style="font-size:11px;color:#888780;font-weight:400">12</span></div>
+  <div class="tab" onclick="showTab('trusted',this)">Trusted senders</div>
+  <div class="tab" onclick="showTab('digest',this)">Weekly digest</div>
+  <div class="tab" onclick="showTab('settings',this)">Settings</div>
+</div>
+
+<div class="main">
+
+  <!-- BLOCKED -->
+  <div id="tab-blocked" class="tab-content active">
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-blocked"></span>High confidence scams — blocked</div>
+      <div class="section-count">2 emails — Geoffrey never saw these</div>
+    </div>
+
+    <div class="card blocked-card" onclick="toggleThreat(this)">
+      <div class="avatar av-red">HM</div>
+      <div class="card-body">
+        <div class="card-from">HMRC Refunds <span class="badge b-scam">Scam — 5/5</span></div>
+        <div class="card-subject">Tax refund of £847.50 — claim within 48 hours</div>
+        <div class="card-preview">Dear taxpayer, HMRC has identified an overpayment. To receive your refund please verify your bank details...</div>
+        <div class="threat-box">
+          <div class="threat-title">Threat signals detected</div>
+          <div class="threat-signals">
+            <span class="threat-signal">HMRC impersonation</span>
+            <span class="threat-signal">Urgency — 48hr deadline</span>
+            <span class="threat-signal">Suspicious domain: hmrc-refunds.co.uk</span>
+            <span class="threat-signal">Requests bank details</span>
+            <span class="threat-signal">Free email host sending as govt</span>
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="btn">View full email</button>
+          <button class="btn deliver">Mark as safe &amp; deliver</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Tuesday</div>
+        <div class="badge b-blocked">Blocked</div>
+      </div>
+    </div>
+
+    <div class="card blocked-card" onclick="toggleThreat(this)">
+      <div class="avatar av-amber">RM</div>
+      <div class="card-body">
+        <div class="card-from">Royal Mail Delivery <span class="badge b-scam">Scam — 4/5</span></div>
+        <div class="card-subject">Your parcel could not be delivered — £2.49 fee required</div>
+        <div class="card-preview">We attempted to deliver your parcel but were unable. A small customs fee of £2.49 is outstanding. Click here to pay...</div>
+        <div class="threat-box">
+          <div class="threat-title">Threat signals detected</div>
+          <div class="threat-signals">
+            <span class="threat-signal">Royal Mail impersonation</span>
+            <span class="threat-signal">Phishing link detected</span>
+            <span class="threat-signal">Domain mismatch: royalmai1-fees.com</span>
+            <span class="threat-signal">Payment request</span>
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="btn">View full email</button>
+          <button class="btn deliver">Mark as safe &amp; deliver</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Monday</div>
+        <div class="badge b-blocked">Blocked</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-warn"></span>Suspicious — suppressed, pending your review</div>
+      <div class="section-count">2 emails — review and decide</div>
+    </div>
+
+    <div class="card" onclick="toggleThreat(this)">
+      <div class="avatar av-blue">BT</div>
+      <div class="card-body">
+        <div class="card-from">BT Business <span class="badge b-warn">Suspicious — 2/5</span></div>
+        <div class="card-subject">Important: your direct debit has failed</div>
+        <div class="card-preview">We were unable to collect your monthly payment. Please update your payment details to avoid service interruption...</div>
+        <div class="threat-box">
+          <div class="threat-title">Why this was flagged</div>
+          <div class="threat-signals">
+            <span class="threat-signal">Payment urgency language</span>
+            <span class="threat-signal">Sender not on trusted list</span>
+          </div>
+          <div class="threat-note">This may be legitimate — Geoffrey does have a BT account. Deliver or block?</div>
+        </div>
+        <div class="action-row">
+          <button class="btn deliver">Deliver to Geoffrey</button>
+          <button class="btn danger">Block</button>
+          <button class="btn">Add BT to trusted senders</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Today</div>
+        <div class="badge b-warn">Review needed</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleThreat(this)">
+      <div class="avatar av-gray">TV</div>
+      <div class="card-body">
+        <div class="card-from">TV Licensing <span class="badge b-warn">Suspicious — 2/5</span></div>
+        <div class="card-subject">Your TV Licence expires in 14 days</div>
+        <div class="card-preview">Your current TV Licence expires on 15 April. To continue watching live TV legally, renew now at tvlicensing.co.uk...</div>
+        <div class="threat-box">
+          <div class="threat-title">Why this was flagged</div>
+          <div class="threat-signals">
+            <span class="threat-signal">TV Licensing commonly impersonated</span>
+            <span class="threat-signal">Deadline pressure language</span>
+          </div>
+          <div class="threat-note">Domain checks out: tvlicensing.co.uk — likely legitimate.</div>
+        </div>
+        <div class="action-row">
+          <button class="btn deliver">Deliver to Geoffrey</button>
+          <button class="btn danger">Block</button>
+          <button class="btn">Add to trusted</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Today</div>
+        <div class="badge b-warn">Review needed</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DELIVERED -->
+  <div id="tab-delivered" class="tab-content">
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-safe"></span>Delivered to Geoffrey this week</div>
+      <div class="section-count">12 emails — all passed safety checks</div>
+    </div>
+
+    <div class="card safe-card">
+      <div class="avatar av-teal">GP</div>
+      <div class="card-body">
+        <div class="card-from">Dr. Patel — Southgate Surgery <span class="badge b-trusted">Trusted</span></div>
+        <div class="card-subject">Appointment reminder — Thursday 27 March, 10:15am</div>
+        <div class="card-preview">This is a reminder of your upcoming appointment with Dr. Patel on Thursday 27 March...</div>
+      </div>
+      <div class="card-meta"><div class="card-time">Today</div><div class="badge b-safe">Delivered</div></div>
+    </div>
+
+    <div class="card safe-card">
+      <div class="avatar av-blue">BA</div>
+      <div class="card-body">
+        <div class="card-from">Barclays <span class="badge b-trusted">Trusted</span></div>
+        <div class="card-subject">Your statement for March 2026 is ready</div>
+        <div class="card-preview">Your monthly account statement is now available to view online or in the Barclays app...</div>
+      </div>
+      <div class="card-meta"><div class="card-time">Yesterday</div><div class="badge b-safe">Delivered</div></div>
+    </div>
+
+    <div class="card safe-card">
+      <div class="avatar av-green">CF</div>
+      <div class="card-body">
+        <div class="card-from">Chris Falck <span class="badge b-trusted">Trusted</span></div>
+        <div class="card-subject">Coming over Sunday — shall I bring anything?</div>
+        <div class="card-preview">Hi Dad, planning to come over on Sunday around 2pm. Let me know if you need anything...</div>
+      </div>
+      <div class="card-meta"><div class="card-time">Wednesday</div><div class="badge b-safe">Delivered</div></div>
+    </div>
+
+    <div class="agent-note">
+      <div style="font-size:11px;color:#888780;flex-shrink:0">↳</div>
+      <div class="agent-note-text">All 12 emails this week were from trusted senders or passed all safety checks. 0 potentially dangerous emails reached Geoffrey.</div>
+    </div>
+
+  </div>
+
+  <!-- TRUSTED SENDERS -->
+  <div id="tab-trusted" class="tab-content">
+
+    <div class="section-header" style="margin-top:0">
+      <div class="section-title"><span class="dot dot-safe"></span>Trusted senders</div>
+      <div class="section-count">Always delivered — bypass all threat scoring</div>
+    </div>
+
+    <div style="margin-bottom:1rem">
+      <button class="btn" style="font-size:12px">+ Add trusted sender</button>
+    </div>
+
+    <div class="trusted-row">
+      <div class="avatar av-teal" style="width:34px;height:34px;font-size:11px;flex-shrink:0">GP</div>
+      <div style="flex:1;min-width:0">
+        <div class="trusted-name">Dr. Patel — Southgate Surgery</div>
+        <div class="trusted-email">appointments@southgatesurgery.nhs.uk</div>
+      </div>
+      <div class="trusted-meta">
+        <div class="badge b-trusted">Trusted</div>
+        <button class="btn danger" style="font-size:10px;padding:2px 8px">Remove</button>
+      </div>
+    </div>
+
+    <div class="trusted-row">
+      <div class="avatar av-blue" style="width:34px;height:34px;font-size:11px;flex-shrink:0">BA</div>
+      <div style="flex:1;min-width:0">
+        <div class="trusted-name">Barclays</div>
+        <div class="trusted-email">statements@barclays.co.uk</div>
+      </div>
+      <div class="trusted-meta">
+        <div class="badge b-trusted">Trusted</div>
+        <button class="btn danger" style="font-size:10px;padding:2px 8px">Remove</button>
+      </div>
+    </div>
+
+    <div class="trusted-row">
+      <div class="avatar av-green" style="width:34px;height:34px;font-size:11px;flex-shrink:0">CF</div>
+      <div style="flex:1;min-width:0">
+        <div class="trusted-name">Chris Falck</div>
+        <div class="trusted-email">chris.falck@gmail.com</div>
+      </div>
+      <div class="trusted-meta">
+        <div class="badge b-trusted">Trusted</div>
+        <button class="btn danger" style="font-size:10px;padding:2px 8px">Remove</button>
+      </div>
+    </div>
+
+    <div class="trusted-row">
+      <div class="avatar av-gray" style="width:34px;height:34px;font-size:11px;flex-shrink:0">MF</div>
+      <div style="flex:1;min-width:0">
+        <div class="trusted-name">Margaret Falck</div>
+        <div class="trusted-email">margaret.falck@outlook.com</div>
+      </div>
+      <div class="trusted-meta">
+        <div class="badge b-trusted">Trusted</div>
+        <button class="btn danger" style="font-size:10px;padding:2px 8px">Remove</button>
+      </div>
+    </div>
+
+    <div class="trusted-row">
+      <div class="avatar av-amber" style="width:34px;height:34px;font-size:11px;flex-shrink:0">AU</div>
+      <div style="flex:1;min-width:0">
+        <div class="trusted-name">Age UK newsletter</div>
+        <div class="trusted-email">news@ageuk.org.uk</div>
+      </div>
+      <div class="trusted-meta">
+        <div class="badge b-trusted">Trusted</div>
+        <button class="btn danger" style="font-size:10px;padding:2px 8px">Remove</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIGEST -->
+  <div id="tab-digest" class="tab-content">
+
+    <div class="section-header" style="margin-top:0">
+      <div class="section-title"><span class="dot dot-safe"></span>Weekly digest preview</div>
+      <div class="section-count">Sent to you every Sunday morning</div>
+    </div>
+
+    <div class="digest-box">
+      <div class="digest-header">
+        <div class="digest-title">Geoffrey's inbox — week of 24 March 2026</div>
+        <div class="digest-date">Sent Sunday 29 March, 8:00am</div>
+      </div>
+      <div class="digest-quote">
+        "Geoffrey's inbox was safe this week. 12 emails were delivered from trusted contacts and safe senders. 4 potential scams were blocked before he saw them. 83 marketing and junk emails were quietly suppressed."
+      </div>
+      <div class="digest-stats">
+        <div class="digest-stat"><div class="digest-stat-n v-safe">12</div><div class="digest-stat-l">Delivered</div></div>
+        <div class="digest-stat"><div class="digest-stat-n v-blocked">4</div><div class="digest-stat-l">Blocked</div></div>
+        <div class="digest-stat"><div class="digest-stat-n v-suppressed">83</div><div class="digest-stat-l">Suppressed</div></div>
+        <div class="digest-stat"><div class="digest-stat-n v-alerts">2</div><div class="digest-stat-l">Alerts sent</div></div>
+      </div>
+      <div class="digest-section-label">Scams blocked this week</div>
+      <div style="margin-bottom:1rem">
+        <div class="scam-item">
+          <span class="scam-item-badge">HMRC scam</span>
+          <span class="scam-item-text">Fake tax refund of £847.50 — HMRC impersonation with suspicious sending domain. Blocked before delivery.</span>
+        </div>
+        <div class="scam-item">
+          <span class="scam-item-badge">Parcel scam</span>
+          <span class="scam-item-text">Fake Royal Mail delivery fee request — phishing link to royalmai1-fees.com detected. Blocked before delivery.</span>
+        </div>
+      </div>
+      <div class="digest-section-label">Notable deliveries</div>
+      <div style="font-size:12px;color:#5f5e5a;display:flex;flex-direction:column;gap:4px">
+        <div>· Appointment reminder from Dr. Patel — Thursday 27 March, 10:15am</div>
+        <div>· March statement from Barclays</div>
+        <div>· Message from Chris (your son)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="tab-settings" class="tab-content">
+
+    <div class="settings-group-label">Protection thresholds</div>
+    <div class="settings-row">
+      <div><div class="settings-label">Immediate alert threshold</div><div class="settings-sub">Send you an alert when threat score reaches this level</div></div>
+      <div class="threshold-value">4 / 5</div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Auto-block threshold</div><div class="settings-sub">Block without asking when threat score reaches this level</div></div>
+      <div class="threshold-value">3 / 5</div>
+    </div>
+
+    <div class="settings-group-label">Notifications</div>
+    <div class="settings-row">
+      <div><div class="settings-label">Weekly digest</div><div class="settings-sub">Summary of Geoffrey's inbox sent to you every Sunday at 8am</div></div>
+      <div class="toggle" onclick="this.classList.toggle('off')"></div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Immediate scam alerts</div><div class="settings-sub">Notify you within minutes when a high-confidence scam is blocked</div></div>
+      <div class="toggle" onclick="this.classList.toggle('off')"></div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Review queue alerts</div><div class="settings-sub">Notify you when emails need your decision</div></div>
+      <div class="toggle" onclick="this.classList.toggle('off')"></div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Geoffrey can see suppressed emails</div><div class="settings-sub">Allow Geoffrey to view what has been blocked if he asks</div></div>
+      <div class="toggle off" onclick="this.classList.toggle('off')"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function showTab(name, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+function toggleThreat(card) {
+  var box = card.querySelector('.threat-box');
+  var row = card.querySelector('.action-row');
+  if (box) box.style.display = box.style.display === 'block' ? 'none' : 'block';
+  if (row) row.style.display = row.style.display === 'flex' ? 'none' : 'flex';
+}
+</script>
+</body>
+</html>

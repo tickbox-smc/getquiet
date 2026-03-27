@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet — Mobile Interface Mockup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #eeece7;
+    --text-primary: #2c2c2a;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --border-subtle: rgba(44,44,42,0.12);
+    --border-mid: rgba(44,44,42,0.22);
+    --teal: #1d9e75;
+    --teal-light: #e1f5ee;
+    --teal-dark: #0f6e56;
+    --coral: #d85a30;
+    --coral-light: #faece7;
+    --coral-dark: #993c1d;
+    --amber: #ef9f27;
+    --amber-light: #faeeda;
+    --amber-dark: #854f0b;
+    --gray-light: #f1efe8;
+    --gray-mid: #888780;
+    --blue-light: #e6f1fb;
+    --blue: #185fa5;
+    --green-light: #eaf3de;
+    --green: #3b6d11;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .page-title h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .logo-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  /* SCENE */
+  .scene {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phone-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.3px;
+  }
+
+  /* PHONE FRAME */
+  .phone {
+    width: 310px;
+    background: var(--bg-secondary);
+    border-radius: 40px;
+    border: 0.5px solid var(--border-mid);
+    padding: 14px;
+  }
+
+  .phone-notch {
+    width: 90px;
+    height: 26px;
+    background: var(--bg-secondary);
+    border-radius: 0 0 18px 18px;
+    margin: 0 auto 10px;
+    border: 0.5px solid var(--border-subtle);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notch-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-mid);
+  }
+
+  .screen {
+    background: var(--bg-tertiary);
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 570px;
+  }
+
+  .home-indicator {
+    height: 4px;
+    width: 100px;
+    background: var(--border-mid);
+    border-radius: 2px;
+    margin: 8px auto 4px;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--bg-primary);
+    padding: 8px 16px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-time { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .status-icons { font-size: 11px; color: var(--text-secondary); }
+
+  /* SCREEN TOPBAR */
+  .s-topbar {
+    background: var(--bg-primary);
+    border-bottom: 0.5px solid var(--border-subtle);
+    padding: 8px 14px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .s-logo {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .s-logo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .s-agent {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .s-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.8); }
+  }
+
+  /* SCREEN SUMMARY */
+  .s-summary {
+    background: var(--bg-primary);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 0.5px solid var(--border-subtle);
+  }
+
+  .s-stat {
+    padding: 10px 0 10px 14px;
+    border-right: 0.5px solid var(--border-subtle);
+  }
+
+  .s-stat:last-child { border-right: none; }
+
+  .s-stat-n { font-size: 20px; font-weight: 600; }
+  .s-stat-n.act { color: var(--coral); }
+  .s-stat-n.handled { color: var(--teal); }
+  .s-stat-n.suppressed { color: var(--gray-mid); }
+  .s-stat-l { font-size: 10px; color: var(--text-tertiary); margin-top: 1px; }
+
+  /* SCREEN TABS */
+  .s-tabs {
+    background: var(--bg-primary);
+    display: flex;
+    border-bottom: 0.5px solid var(--border-subtle);
+    overflow-x: auto;
+  }
+
+  .s-tab {
+    font-size: 12px;
+    padding: 8px 14px;
+    color: var(--text-tertiary);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .s-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* SCREEN CONTENT */
+  .s-content { padding: 10px 12px; }
+
+  .s-section-label {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 6px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .s-section-label:first-child { margin-top: 0; }
+
+  .s-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .s-dot-act { background: var(--coral); }
+  .s-dot-handled { background: var(--teal); }
+  .s-dot-sup { background: #b4b2a9; }
+
+  /* MINI CARDS */
+  .s-card {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+  }
+
+  .s-card.urgent {
+    border-left: 2px solid var(--coral);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+
+  /* AVATARS */
+  .s-av {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .av-red    { background: var(--coral-light); color: var(--coral-dark); }
+  .av-blue   { background: var(--blue-light);  color: var(--blue); }
+  .av-teal   { background: var(--teal-light);  color: var(--teal-dark); }
+  .av-gray   { background: var(--gray-light);  color: var(--gray-mid); }
+  .av-green  { background: var(--green-light); color: var(--green); }
+
+  /* CARD BODY */
+  .s-card-body { flex: 1; min-width: 0; }
+
+  .s-from {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1px;
+  }
+
+  .s-from-time {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  .s-subject {
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+
+  .s-meta { display: flex; align-items: center; gap: 5px; }
+
+  /* MINI BADGES */
+  .s-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 8px;
+  }
+
+  .sb-act      { background: var(--coral-light);  color: var(--coral-dark); }
+  .sb-critical { background: var(--coral);         color: #fff; }
+  .sb-deadline { background: var(--amber-light);   color: var(--amber-dark); }
+  .sb-handled  { background: var(--teal-light);    color: var(--teal-dark); }
+  .sb-fyi      { background: var(--gray-light);    color: var(--gray-mid); }
+  .sb-unsub    { background: #fcebeb;              color: #a32d2d; }
+
+  /* PIPS */
+  .s-pips { display: flex; gap: 2px; align-items: center; }
+  .s-pip { width: 4px; height: 4px; border-radius: 50%; background: var(--border-subtle); }
+  .s-pip.on   { background: var(--teal); }
+  .s-pip.on-r { background: var(--coral); }
+  .s-pip.on-a { background: var(--amber); }
+
+  /* ACTION STRIPS */
+  .s-action-strip {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .s-btn {
+    font-size: 10px;
+    padding: 4px 9px;
+    border-radius: 6px;
+    border: 0.5px solid var(--border-mid);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  .s-btn.primary {
+    background: var(--teal-light);
+    border-color: #9fe1cb;
+    color: var(--teal-dark);
+  }
+
+  /* AGENT NOTE */
+  .s-agent-note {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 7px 10px;
+    margin: 4px 0 6px 39px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* SUPPRESS ROWS */
+  .s-sup-row {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.75;
+  }
+
+  .s-sup-row.active { opacity: 1; border-color: var(--border-mid); }
+
+  .s-sup-name {
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .s-sup-count {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  /* BOTTOM NAVBAR */
+  .s-navbar {
+    background: var(--bg-primary);
+    border-top: 0.5px solid var(--border-subtle);
+    display: flex;
+    padding: 8px 0 12px;
+  }
+
+  .s-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+  }
+
+  .s-nav-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .s-nav-icon.active { background: var(--bg-secondary); }
+
+  .s-nav-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-mid);
+  }
+
+  .s-nav-dot.act-dot {
+    background: var(--coral-light);
+    border-color: var(--coral);
+    position: relative;
+  }
+
+  .s-nav-dot.act-dot::after {
+    content: '4';
+    font-size: 7px;
+    font-weight: 600;
+    color: var(--coral-dark);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .s-nav-label {
+    font-size: 9px;
+    color: var(--text-tertiary);
+  }
+
+  .s-nav-label.active {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1><div class="logo-dot"></div>Quiet — mobile interface</h1>
+  <div class="page-subtitle">Act · Handled · Suppressed</div>
+</div>
+
+<div class="scene">
+
+  <!-- PHONE 1: ACT VIEW -->
+  <div class="phone-wrap">
+    <div class="phone-label">Act view</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">09:41</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo"><div class="s-logo-dot"></div>Quiet</div>
+          <div class="s-agent"><div class="s-pulse"></div>Agent active</div>
+        </div>
+
+        <div class="s-summary">
+          <div class="s-stat"><div class="s-stat-n act">4</div><div class="s-stat-l">Act</div></div>
+          <div class="s-stat"><div class="s-stat-n handled">18</div><div class="s-stat-l">Handled</div></div>
+          <div class="s-stat"><div class="s-stat-n suppressed">61</div><div class="s-stat-l">Suppressed</div></div>
+        </div>
+
+        <div class="s-tabs">
+          <div class="s-tab active">Act</div>
+          <div class="s-tab">Handled</div>
+          <div class="s-tab">Suppressed</div>
+          <div class="s-tab">Settings</div>
+        </div>
+
+        <div class="s-content">
+
+          <div class="s-section-label"><span class="s-dot s-dot-act"></span>Needs reply</div>
+
+          <div class="s-card urgent">
+            <div class="s-av av-red">DM</div>
+            <div class="s-card-body">
+              <div class="s-from">David Mitchell<span class="s-from-time">09:41</span></div>
+              <div class="s-subject">AWS migration — EOD deadline</div>
+              <div class="s-meta">
+                <span class="s-badge sb-critical">Critical</span>
+                <div class="s-pips">
+                  <div class="s-pip on-r"></div><div class="s-pip on-r"></div><div class="s-pip on-r"></div><div class="s-pip on-r"></div><div class="s-pip on-r"></div>
+                </div>
+              </div>
+              <div class="s-action-strip">
+                <button class="s-btn primary">Draft reply</button>
+                <button class="s-btn">Snooze</button>
+                <button class="s-btn">Delegate</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-card">
+            <div class="s-av av-blue">SC</div>
+            <div class="s-card-body">
+              <div class="s-from">Sarah Chen<span class="s-from-time">08:17</span></div>
+              <div class="s-subject">Quarterly review — Thursday?</div>
+              <div class="s-meta">
+                <span class="s-badge sb-act">Reply needed</span>
+                <div class="s-pips">
+                  <div class="s-pip on"></div><div class="s-pip on"></div><div class="s-pip on"></div><div class="s-pip on"></div><div class="s-pip"></div>
+                </div>
+              </div>
+              <div class="s-action-strip">
+                <button class="s-btn primary">Confirm yes</button>
+                <button class="s-btn">Alternative</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-section-label"><span class="s-dot s-dot-act"></span>Review required</div>
+
+          <div class="s-card">
+            <div class="s-av av-gray">HR</div>
+            <div class="s-card-body">
+              <div class="s-from">HMRC<span class="s-from-time">Yesterday</span></div>
+              <div class="s-subject">Self Assessment — 31 Jan</div>
+              <div class="s-meta">
+                <span class="s-badge sb-deadline">Deadline</span>
+                <div class="s-pips">
+                  <div class="s-pip on-a"></div><div class="s-pip on-a"></div><div class="s-pip on-a"></div><div class="s-pip on-a"></div><div class="s-pip on-a"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-card">
+            <div class="s-av av-teal">BA</div>
+            <div class="s-card-body">
+              <div class="s-from">Barclays<span class="s-from-time">Yesterday</span></div>
+              <div class="s-subject">March 2026 statement ready</div>
+              <div class="s-meta">
+                <span class="s-badge sb-fyi">FYI</span>
+                <div class="s-pips">
+                  <div class="s-pip on"></div><div class="s-pip on"></div><div class="s-pip on"></div><div class="s-pip"></div><div class="s-pip"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot act-dot"></div></div>
+            <div class="s-nav-label active">Act</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label">Handled</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot"></div></div>
+            <div class="s-nav-label">Quiet</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:12px;height:12px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: HANDLED VIEW -->
+  <div class="phone-wrap">
+    <div class="phone-label">Handled view</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">09:41</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo"><div class="s-logo-dot"></div>Quiet</div>
+          <div class="s-agent"><div class="s-pulse"></div>Agent active</div>
+        </div>
+
+        <div class="s-summary">
+          <div class="s-stat"><div class="s-stat-n act">4</div><div class="s-stat-l">Act</div></div>
+          <div class="s-stat"><div class="s-stat-n handled">18</div><div class="s-stat-l">Handled</div></div>
+          <div class="s-stat"><div class="s-stat-n suppressed">61</div><div class="s-stat-l">Suppressed</div></div>
+        </div>
+
+        <div class="s-tabs">
+          <div class="s-tab">Act</div>
+          <div class="s-tab active">Handled</div>
+          <div class="s-tab">Suppressed</div>
+          <div class="s-tab">Settings</div>
+        </div>
+
+        <div class="s-content">
+
+          <div class="s-section-label"><span class="s-dot s-dot-handled"></span>Auto-replied</div>
+
+          <div class="s-card">
+            <div class="s-av av-gray">RB</div>
+            <div class="s-card-body">
+              <div class="s-from">Robert Barnes<span class="s-from-time">10:02</span></div>
+              <div class="s-subject">Standup time question</div>
+              <div class="s-meta"><span class="s-badge sb-handled">Auto-replied</span></div>
+            </div>
+          </div>
+          <div class="s-agent-note">↳ Templated from your reply on 14 Mar. Robert has asked this before.</div>
+
+          <div class="s-card">
+            <div class="s-av av-green">TM</div>
+            <div class="s-card-body">
+              <div class="s-from">Teams<span class="s-from-time">09:55</span></div>
+              <div class="s-subject">Mentioned in #cloud-ops</div>
+              <div class="s-meta"><span class="s-badge sb-handled">Archived</span></div>
+            </div>
+          </div>
+          <div class="s-agent-note">↳ Teams notifications routed to Teams app per your preference.</div>
+
+          <div class="s-card">
+            <div class="s-av av-blue">LI</div>
+            <div class="s-card-body">
+              <div class="s-from">LinkedIn<span class="s-from-time">08:30</span></div>
+              <div class="s-subject">3 new connection requests</div>
+              <div class="s-meta"><span class="s-badge sb-handled">Archived</span></div>
+            </div>
+          </div>
+
+          <div class="s-section-label"><span class="s-dot s-dot-handled"></span>Forwarded / logged</div>
+
+          <div class="s-card">
+            <div class="s-av av-red">IT</div>
+            <div class="s-card-body">
+              <div class="s-from">IT Helpdesk<span class="s-from-time">07:44</span></div>
+              <div class="s-subject">Ticket #4821 — VPN resolved</div>
+              <div class="s-meta"><span class="s-badge sb-handled">Logged</span></div>
+            </div>
+          </div>
+          <div class="s-agent-note">↳ Added to your task list and marked resolved.</div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot act-dot"></div></div>
+            <div class="s-nav-label">Act</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label active">Handled</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot"></div></div>
+            <div class="s-nav-label">Quiet</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:12px;height:12px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 3: SUPPRESSED VIEW -->
+  <div class="phone-wrap">
+    <div class="phone-label">Suppressed view</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">09:41</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo"><div class="s-logo-dot"></div>Quiet</div>
+          <div class="s-agent"><div class="s-pulse"></div>Agent active</div>
+        </div>
+
+        <div class="s-summary">
+          <div class="s-stat"><div class="s-stat-n act">4</div><div class="s-stat-l">Act</div></div>
+          <div class="s-stat"><div class="s-stat-n handled">18</div><div class="s-stat-l">Handled</div></div>
+          <div class="s-stat"><div class="s-stat-n suppressed">61</div><div class="s-stat-l">Suppressed</div></div>
+        </div>
+
+        <div class="s-tabs">
+          <div class="s-tab">Act</div>
+          <div class="s-tab">Handled</div>
+          <div class="s-tab active">Suppressed</div>
+          <div class="s-tab">Settings</div>
+        </div>
+
+        <div class="s-content">
+
+          <div class="s-section-label"><span class="s-dot s-dot-sup"></span>Permanently muted</div>
+
+          <div class="s-sup-row">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">PB</div>
+            <div class="s-sup-name">Purplebricks</div>
+            <div class="s-sup-count">23 ignored</div>
+            <span class="s-badge sb-fyi">Muted</span>
+          </div>
+
+          <div class="s-sup-row">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">OD</div>
+            <div class="s-sup-name">ODEON Cinemas</div>
+            <div class="s-sup-count">18 ignored</div>
+            <span class="s-badge sb-fyi">Muted</span>
+          </div>
+
+          <div class="s-sup-row">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">×6</div>
+            <div class="s-sup-name">SaaS trial emails (6)</div>
+            <div class="s-sup-count">44 blocked</div>
+            <span class="s-badge sb-fyi">Muted</span>
+          </div>
+
+          <div class="s-section-label"><span class="s-dot s-dot-sup"></span>Unsubscribe candidates</div>
+
+          <div class="s-sup-row active">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">WH</div>
+            <div class="s-sup-name">Which? Magazine</div>
+            <div class="s-sup-count">11 unread</div>
+            <div style="display:flex;gap:4px;flex-shrink:0;">
+              <button class="s-btn primary" style="font-size:9px;padding:3px 7px;">Unsub</button>
+              <button class="s-btn" style="font-size:9px;padding:3px 7px;">Keep</button>
+            </div>
+          </div>
+
+          <div class="s-sup-row active">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">AM</div>
+            <div class="s-sup-name">Amazon UK marketing</div>
+            <div class="s-sup-count">9 unread</div>
+            <div style="display:flex;gap:4px;flex-shrink:0;">
+              <button class="s-btn primary" style="font-size:9px;padding:3px 7px;">Unsub</button>
+              <button class="s-btn" style="font-size:9px;padding:3px 7px;">Keep</button>
+            </div>
+          </div>
+
+          <div class="s-section-label"><span class="s-dot s-dot-sup"></span>Auto-unsubscribed this week</div>
+
+          <div class="s-sup-row">
+            <div class="s-av av-gray" style="width:26px;height:26px;font-size:9px;flex-shrink:0">×7</div>
+            <div class="s-sup-name">Retail senders (7 total)</div>
+            <div class="s-sup-count">20+ each</div>
+            <span class="s-badge sb-unsub">Auto-unsubbed</span>
+          </div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot act-dot"></div></div>
+            <div class="s-nav-label">Act</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label">Handled</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot"></div></div>
+            <div class="s-nav-label active">Quiet</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:12px;height:12px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

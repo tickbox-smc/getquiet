@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet Protect — Mobile Interface Mockup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #eeece7;
+    --text-primary: #2c2c2a;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --border-subtle: rgba(44,44,42,0.12);
+    --border-mid: rgba(44,44,42,0.22);
+    --teal: #1d9e75;
+    --teal-light: #e1f5ee;
+    --teal-dark: #0f6e56;
+    --teal-border: #9fe1cb;
+    --coral: #d85a30;
+    --coral-light: #faece7;
+    --coral-dark: #993c1d;
+    --amber: #ef9f27;
+    --amber-light: #faeeda;
+    --amber-dark: #854f0b;
+    --gray-light: #f1efe8;
+    --gray-mid: #888780;
+    --blue-light: #e6f1fb;
+    --blue: #185fa5;
+    --green-light: #eaf3de;
+    --green: #3b6d11;
+    --red-light: #fcebeb;
+    --red: #a32d2d;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .page-title h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .logo-shield {
+    width: 20px;
+    height: 20px;
+    background: var(--teal);
+    border-radius: 3px 3px 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-shield-inner {
+    width: 9px;
+    height: 9px;
+    background: white;
+    border-radius: 2px 2px 5px 5px;
+  }
+
+  .protect-badge {
+    font-size: 10px;
+    font-weight: 600;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  /* SCENE */
+  .scene {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phone-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.3px;
+    text-align: center;
+  }
+
+  /* PHONE FRAME */
+  .phone {
+    width: 300px;
+    background: var(--bg-secondary);
+    border-radius: 40px;
+    border: 0.5px solid var(--border-mid);
+    padding: 12px;
+  }
+
+  .phone-notch {
+    width: 80px;
+    height: 24px;
+    background: var(--bg-secondary);
+    border-radius: 0 0 16px 16px;
+    margin: 0 auto 8px;
+    border: 0.5px solid var(--border-subtle);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notch-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-mid);
+  }
+
+  .screen {
+    background: var(--bg-tertiary);
+    border-radius: 26px;
+    overflow: hidden;
+    min-height: 560px;
+  }
+
+  .home-bar {
+    height: 4px;
+    width: 80px;
+    background: var(--border-mid);
+    border-radius: 2px;
+    margin: 6px auto 4px;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--bg-primary);
+    padding: 7px 14px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-time { font-size: 11px; font-weight: 500; color: var(--text-primary); }
+  .status-icons { font-size: 10px; color: var(--text-secondary); }
+
+  /* SCREEN TOPBAR */
+  .s-topbar {
+    background: var(--bg-primary);
+    border-bottom: 0.5px solid var(--border-subtle);
+    padding: 7px 12px 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .s-logo {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .s-shield {
+    width: 16px;
+    height: 16px;
+    background: var(--teal);
+    border-radius: 3px 3px 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .s-shield-i {
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 2px 2px 4px 4px;
+  }
+
+  .s-badge {
+    font-size: 9px;
+    font-weight: 600;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    padding: 2px 6px;
+    border-radius: 8px;
+  }
+
+  .s-agent {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  .s-pulse {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.8); }
+  }
+
+  /* BANNER */
+  .s-banner {
+    background: var(--teal-light);
+    border-bottom: 0.5px solid var(--teal-border);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .s-banner-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .s-banner-text { font-size: 10px; color: var(--teal-dark); line-height: 1.4; }
+  .s-banner-text strong { font-weight: 600; }
+
+  /* STATS */
+  .s-stats {
+    background: var(--bg-primary);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 0.5px solid var(--border-subtle);
+  }
+
+  .s-stat {
+    padding: 9px 0 9px 10px;
+    border-right: 0.5px solid var(--border-subtle);
+  }
+
+  .s-stat:last-child { border-right: none; }
+
+  .s-stat-n { font-size: 18px; font-weight: 600; }
+  .s-stat-n.safe      { color: var(--teal); }
+  .s-stat-n.blocked   { color: var(--coral); }
+  .s-stat-n.suppressed { color: var(--gray-mid); }
+  .s-stat-l { font-size: 9px; color: var(--text-tertiary); margin-top: 1px; }
+
+  /* TABS */
+  .s-tabs {
+    background: var(--bg-primary);
+    display: flex;
+    border-bottom: 0.5px solid var(--border-subtle);
+  }
+
+  .s-tab {
+    font-size: 11px;
+    padding: 7px 12px;
+    color: var(--text-tertiary);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .s-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .s-content { padding: 9px 10px; }
+
+  .s-section-lbl {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 8px 0 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .s-section-lbl:first-child { margin-top: 0; }
+
+  .s-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .s-dot-blocked  { background: var(--coral); }
+  .s-dot-safe     { background: var(--teal); }
+  .s-dot-warn     { background: #ba7517; }
+
+  /* CARDS */
+  .s-card {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 9px 10px;
+    margin-bottom: 4px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .s-card.blocked-c {
+    border-left: 2px solid var(--coral);
+    border-radius: 0 10px 10px 0;
+  }
+
+  .s-card.safe-c {
+    border-left: 2px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+  }
+
+  /* AVATARS */
+  .s-av {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .av-red    { background: var(--coral-light); color: var(--coral-dark); }
+  .av-blue   { background: var(--blue-light);  color: var(--blue); }
+  .av-teal   { background: var(--teal-light);  color: var(--teal-dark); }
+  .av-gray   { background: var(--gray-light);  color: var(--gray-mid); }
+  .av-amber  { background: var(--amber-light); color: var(--amber-dark); }
+  .av-green  { background: var(--green-light); color: var(--green); }
+
+  /* CARD BODY */
+  .s-card-body { flex: 1; min-width: 0; }
+
+  .s-from {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1px;
+  }
+
+  .s-from-time { font-size: 9px; color: var(--text-tertiary); font-weight: 400; }
+
+  .s-subject {
+    font-size: 10px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+
+  /* MINI BADGES */
+  .s-badge-item {
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 7px;
+    white-space: nowrap;
+  }
+
+  .sb-scam     { background: var(--coral);       color: #fff; }
+  .sb-blocked  { background: var(--coral-light);  color: var(--coral-dark); }
+  .sb-warn     { background: var(--amber-light);  color: var(--amber-dark); }
+  .sb-safe     { background: var(--teal-light);   color: var(--teal-dark); }
+  .sb-trusted  { background: var(--teal-light);   color: var(--teal-dark); }
+
+  /* THREAT SIGNALS */
+  .s-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 4px;
+  }
+
+  .s-signal {
+    font-size: 8px;
+    background: #f5c4b3;
+    color: #712b13;
+    padding: 1px 5px;
+    border-radius: 6px;
+  }
+
+  /* REVIEW BUTTONS */
+  .s-review-btns {
+    display: flex;
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .s-btn-deliver {
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 5px;
+    border: 0.5px solid var(--teal-border);
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  .s-btn-block {
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 5px;
+    border: 0.5px solid #f5c4b3;
+    background: var(--coral-light);
+    color: var(--coral-dark);
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  /* AGENT NOTE */
+  .s-agent-note {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 6px 9px;
+    margin: 3px 0 5px 36px;
+    font-size: 9px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* DIGEST BOX */
+  .s-digest-box {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .s-digest-quote {
+    font-size: 10px;
+    color: var(--teal-dark);
+    font-style: italic;
+    background: var(--teal-light);
+    padding: 8px 10px;
+    border-radius: 0 8px 8px 0;
+    border-left: 2px solid var(--teal);
+    margin-bottom: 9px;
+    line-height: 1.5;
+  }
+
+  .s-digest-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-bottom: 9px;
+  }
+
+  .s-dstat {
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    padding: 7px 4px;
+    text-align: center;
+  }
+
+  .s-dstat-n { font-size: 16px; font-weight: 600; }
+  .s-dstat-l { font-size: 8px; color: var(--text-tertiary); margin-top: 1px; }
+
+  .s-digest-section {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+    padding-top: 9px;
+    border-top: 0.5px solid var(--border-subtle);
+  }
+
+  .s-scam-item {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+
+  .s-scam-badge {
+    background: var(--coral-light);
+    color: var(--coral-dark);
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .s-scam-text {
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* DIGEST FOOTER BUTTONS */
+  .s-digest-btns {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .s-digest-btn {
+    flex: 1;
+    font-size: 10px;
+    padding: 6px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  .s-digest-btn.primary {
+    border: 0.5px solid var(--teal-border);
+    background: var(--teal-light);
+    color: var(--teal-dark);
+  }
+
+  .s-digest-btn.secondary {
+    border: 0.5px solid var(--border-mid);
+    background: transparent;
+    color: var(--text-secondary);
+  }
+
+  /* SAFE INBOX */
+  .s-safe-inbox { padding: 9px 10px; }
+
+  .s-inbox-msg {
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 9px 10px;
+    margin-bottom: 4px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .s-inbox-unread {
+    border-left: 2px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+  }
+
+  .s-inbox-subject {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .s-inbox-preview {
+    font-size: 9px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .s-all-clear {
+    margin-top: 16px;
+    background: var(--teal-light);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  .s-all-clear-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    margin-bottom: 3px;
+  }
+
+  .s-all-clear-text {
+    font-size: 9px;
+    color: var(--teal-dark);
+    line-height: 1.5;
+  }
+
+  /* NAVBAR */
+  .s-navbar {
+    background: var(--bg-primary);
+    border-top: 0.5px solid var(--border-subtle);
+    display: flex;
+    padding: 6px 0 10px;
+  }
+
+  .s-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+  }
+
+  .s-nav-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .s-nav-icon.active { background: var(--bg-secondary); }
+
+  .s-nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-mid);
+  }
+
+  .s-nav-dot.blocked-d {
+    background: var(--coral-light);
+    border-color: var(--coral);
+  }
+
+  .s-nav-label {
+    font-size: 8px;
+    color: var(--text-tertiary);
+  }
+
+  .s-nav-label.active {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>
+    <div class="logo-shield"><div class="logo-shield-inner"></div></div>
+    Quiet
+    <div class="protect-badge">Protect</div>
+  </h1>
+  <div class="page-subtitle">Mobile interface — family manager &amp; protected user views</div>
+</div>
+
+<div class="scene">
+
+  <!-- PHONE 1: FAMILY MANAGER — BLOCKED VIEW -->
+  <div class="phone-wrap">
+    <div class="phone-label">Family manager — blocked view</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">09:41</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo">
+            <div class="s-shield"><div class="s-shield-i"></div></div>
+            Quiet
+            <div class="s-badge">Protect</div>
+          </div>
+          <div class="s-agent"><div class="s-pulse"></div>Active</div>
+        </div>
+
+        <div class="s-banner">
+          <div class="s-banner-dot"></div>
+          <div class="s-banner-text"><strong>Geoffrey's inbox is protected.</strong> Managing for him.</div>
+        </div>
+
+        <div class="s-stats">
+          <div class="s-stat"><div class="s-stat-n safe">12</div><div class="s-stat-l">Delivered</div></div>
+          <div class="s-stat"><div class="s-stat-n blocked">4</div><div class="s-stat-l">Blocked</div></div>
+          <div class="s-stat"><div class="s-stat-n suppressed">83</div><div class="s-stat-l">Suppressed</div></div>
+        </div>
+
+        <div class="s-tabs">
+          <div class="s-tab active">Blocked</div>
+          <div class="s-tab">Delivered</div>
+          <div class="s-tab">Trusted</div>
+        </div>
+
+        <div class="s-content">
+
+          <div class="s-section-lbl"><span class="s-dot s-dot-blocked"></span>Blocked scams</div>
+
+          <div class="s-card blocked-c">
+            <div class="s-av av-red">HM</div>
+            <div class="s-card-body">
+              <div class="s-from">HMRC Refunds<span class="s-from-time">Tue</span></div>
+              <div class="s-subject">Tax refund of £847.50 — claim in 48hrs</div>
+              <div style="display:flex;align-items:center;gap:4px;margin-top:3px;">
+                <span class="s-badge-item sb-scam">Scam 5/5</span>
+              </div>
+              <div class="s-signals">
+                <span class="s-signal">HMRC impersonation</span>
+                <span class="s-signal">Fake domain</span>
+                <span class="s-signal">Bank details request</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-card blocked-c">
+            <div class="s-av av-amber">RM</div>
+            <div class="s-card-body">
+              <div class="s-from">Royal Mail<span class="s-from-time">Mon</span></div>
+              <div class="s-subject">Parcel fee — £2.49 required</div>
+              <div style="display:flex;gap:4px;margin-top:3px;">
+                <span class="s-badge-item sb-scam">Scam 4/5</span>
+              </div>
+              <div class="s-signals">
+                <span class="s-signal">Impersonation</span>
+                <span class="s-signal">Phishing link</span>
+                <span class="s-signal">Domain: royalmai1-fees.com</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="s-section-lbl"><span class="s-dot s-dot-warn"></span>Review needed</div>
+
+          <div class="s-card">
+            <div class="s-av av-blue">BT</div>
+            <div class="s-card-body">
+              <div class="s-from">BT Business<span class="s-from-time">Today</span></div>
+              <div class="s-subject">Direct debit failed</div>
+              <div style="display:flex;gap:4px;margin-top:3px;">
+                <span class="s-badge-item sb-warn">Review 2/5</span>
+              </div>
+              <div class="s-review-btns">
+                <button class="s-btn-deliver">Deliver</button>
+                <button class="s-btn-block">Block</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot blocked-d"></div></div>
+            <div class="s-nav-label active">Blocked</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label">Delivered</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot"></div></div>
+            <div class="s-nav-label">Trusted</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:11px;height:11px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: GEOFFREY'S SAFE INBOX -->
+  <div class="phone-wrap">
+    <div class="phone-label">Geoffrey's safe inbox</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">09:41</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo">
+            <div class="s-shield"><div class="s-shield-i"></div></div>
+            My inbox
+          </div>
+          <div class="s-agent"><div class="s-pulse"></div><span style="color:var(--teal-dark);">Protected</span></div>
+        </div>
+
+        <div class="s-banner">
+          <div class="s-banner-dot"></div>
+          <div class="s-banner-text">Your inbox is kept safe and tidy for you.</div>
+        </div>
+
+        <div class="s-safe-inbox">
+
+          <div style="font-size:10px;color:var(--text-tertiary);margin-bottom:8px;">3 messages</div>
+
+          <div class="s-inbox-msg s-inbox-unread">
+            <div class="s-av av-teal">GP</div>
+            <div class="s-card-body">
+              <div class="s-from">Dr. Patel<span class="s-from-time">Today</span></div>
+              <div class="s-inbox-subject">Appointment reminder — Thu 27 Mar</div>
+              <div class="s-inbox-preview">This is a reminder of your upcoming appointment...</div>
+            </div>
+          </div>
+
+          <div class="s-inbox-msg">
+            <div class="s-av av-green">CF</div>
+            <div class="s-card-body">
+              <div class="s-from">Chris<span class="s-from-time">Wed</span></div>
+              <div class="s-subject">Coming over Sunday — anything to bring?</div>
+              <div class="s-inbox-preview">Hi Dad, planning to come over on Sunday around 2pm...</div>
+            </div>
+          </div>
+
+          <div class="s-inbox-msg">
+            <div class="s-av av-blue">BA</div>
+            <div class="s-card-body">
+              <div class="s-from">Barclays<span class="s-from-time">Yesterday</span></div>
+              <div class="s-subject">March statement ready to view</div>
+              <div class="s-inbox-preview">Your monthly account statement is now available...</div>
+            </div>
+          </div>
+
+          <div class="s-all-clear">
+            <div class="s-all-clear-title">All clear this week</div>
+            <div class="s-all-clear-text">Your inbox has been kept safe. Junk and unwanted emails have been quietly removed for you.</div>
+          </div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label active">Inbox</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot"></div></div>
+            <div class="s-nav-label">Sent</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:11px;height:11px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 3: FAMILY MANAGER — WEEKLY DIGEST -->
+  <div class="phone-wrap">
+    <div class="phone-label">Family manager — weekly digest</div>
+    <div class="phone">
+      <div class="phone-notch"><div class="notch-dot"></div></div>
+      <div class="screen">
+
+        <div class="status-bar">
+          <div class="status-time">08:00</div>
+          <div class="status-icons">▲▲▲ 100%</div>
+        </div>
+
+        <div class="s-topbar">
+          <div class="s-logo">
+            <div class="s-shield"><div class="s-shield-i"></div></div>
+            Quiet
+            <div class="s-badge">Protect</div>
+          </div>
+          <div style="font-size:9px;color:var(--text-tertiary);">Sunday digest</div>
+        </div>
+
+        <div class="s-content">
+
+          <div style="font-size:11px;font-weight:600;color:var(--text-primary);margin-bottom:8px;">Geoffrey's inbox — week of 24 Mar</div>
+
+          <div class="s-digest-box">
+            <div class="s-digest-quote">"Geoffrey's inbox was safe this week. 4 potential scams blocked before he saw them."</div>
+
+            <div class="s-digest-stats">
+              <div class="s-dstat"><div class="s-dstat-n" style="color:var(--teal);">12</div><div class="s-dstat-l">Delivered</div></div>
+              <div class="s-dstat"><div class="s-dstat-n" style="color:var(--coral);">4</div><div class="s-dstat-l">Blocked</div></div>
+              <div class="s-dstat"><div class="s-dstat-n" style="color:var(--gray-mid);">83</div><div class="s-dstat-l">Suppressed</div></div>
+              <div class="s-dstat"><div class="s-dstat-n" style="color:#ba7517;">2</div><div class="s-dstat-l">Alerts</div></div>
+            </div>
+
+            <div class="s-digest-section">Scams blocked</div>
+
+            <div class="s-scam-item">
+              <span class="s-scam-badge">HMRC</span>
+              <span class="s-scam-text">Fake £847.50 tax refund — HMRC impersonation, suspicious domain.</span>
+            </div>
+
+            <div class="s-scam-item">
+              <span class="s-scam-badge">Parcel</span>
+              <span class="s-scam-text">Fake Royal Mail fee — phishing link detected.</span>
+            </div>
+
+            <div class="s-digest-section">Delivered safely</div>
+
+            <div style="font-size:10px;color:var(--text-secondary);display:flex;flex-direction:column;gap:3px;line-height:1.4;">
+              <div>· Appointment reminder from Dr. Patel</div>
+              <div>· March bank statement — Barclays</div>
+              <div>· Message from Chris</div>
+            </div>
+
+            <div class="s-digest-btns">
+              <button class="s-digest-btn primary">View blocked</button>
+              <button class="s-digest-btn secondary">Manage trusted</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="s-navbar">
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot blocked-d"></div></div>
+            <div class="s-nav-label">Blocked</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div class="s-nav-dot" style="background:var(--teal-light);border-color:var(--teal);"></div></div>
+            <div class="s-nav-label">Delivered</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon active"><div class="s-nav-dot" style="background:var(--teal-light);border:1.5px solid var(--teal);"></div></div>
+            <div class="s-nav-label active">Digest</div>
+          </div>
+          <div class="s-nav-item">
+            <div class="s-nav-icon"><div style="width:11px;height:11px;border-radius:2px;border:1.5px solid var(--border-mid);"></div></div>
+            <div class="s-nav-label">Settings</div>
+          </div>
+        </div>
+
+        <div class="home-bar"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

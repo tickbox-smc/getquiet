@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet — Decision Interface</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #eeece7;
+    --bg-info: #e6f1fb;
+    --bg-success: #e1f5ee;
+    --bg-warning: #faeeda;
+    --bg-danger: #faece7;
+    --text-primary: #2c2c2a;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --text-info: #185fa5;
+    --text-success: #0f6e56;
+    --text-warning: #854f0b;
+    --text-danger: #993c1d;
+    --border-subtle: rgba(44,44,42,0.12);
+    --border-mid: rgba(44,44,42,0.22);
+    --border-info: rgba(24,95,165,0.3);
+    --teal: #1d9e75;
+    --coral: #d85a30;
+    --amber: #ef9f27;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  body { font-family: var(--font); background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--bg-primary);
+    border-bottom: 0.5px solid var(--border-subtle);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .logo { font-size: 15px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.3px; display: flex; align-items: center; gap: 6px; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+  .account-pill { font-size: 11px; color: var(--text-secondary); background: var(--bg-secondary); border: 0.5px solid var(--border-subtle); border-radius: 20px; padding: 3px 10px; cursor: pointer; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .agent-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.45;transform:scale(0.8)} }
+  .last-run { font-size: 11px; color: var(--text-tertiary); }
+
+  /* SUMMARY BAR */
+  .summary-bar {
+    background: var(--bg-primary);
+    border-bottom: 0.5px solid var(--border-subtle);
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat { padding: 12px 1.5rem 12px 0; border-right: 0.5px solid var(--border-subtle); margin-right: 1.5rem; }
+  .stat:last-child { border-right: none; margin-right: 0; }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 3px; }
+  .stat-value { font-size: 22px; font-weight: 600; }
+  .v-act { color: var(--coral); }
+  .v-handled { color: var(--teal); }
+  .v-suppressed { color: var(--text-tertiary); }
+
+  /* TAB BAR */
+  .tab-bar { background: var(--bg-primary); border-bottom: 0.5px solid var(--border-subtle); padding: 0 1.5rem; display: flex; }
+  .tab { font-size: 13px; padding: 10px 16px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; transition: all 0.15s; margin-bottom: -0.5px; }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 600; }
+
+  /* MAIN */
+  .main { padding: 1.25rem 1.5rem; max-width: 900px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 1.5rem; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+  .section-count { font-size: 11px; color: var(--text-tertiary); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-act { background: var(--coral); }
+  .dot-handled { background: var(--teal); }
+  .dot-sup { background: #b4b2a9; }
+
+  /* CARDS */
+  .card { background: var(--bg-primary); border: 0.5px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 6px; display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: start; cursor: pointer; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--border-mid); }
+  .card.urgent { border-left: 2px solid var(--coral); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .av-red { background: #faece7; color: #993c1d; }
+  .av-blue { background: #e6f1fb; color: #185fa5; }
+  .av-teal { background: #e1f5ee; color: #0f6e56; }
+  .av-gray { background: #f1efe8; color: #5f5e5a; }
+  .av-green { background: #eaf3de; color: #3b6d11; }
+  .av-purple { background: #eeedfe; color: #534ab7; }
+
+  .card-body { min-width: 0; }
+  .card-from { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .card-subject { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-preview { font-size: 12px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .card-time { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+
+  /* BADGES */
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+  .b-act { background: #faece7; color: #993c1d; }
+  .b-deadline { background: #faeeda; color: #854f0b; }
+  .b-fyi { background: #f1efe8; color: #5f5e5a; }
+  .b-handled { background: #e1f5ee; color: #0f6e56; }
+  .b-sup { background: #f1efe8; color: #888780; }
+  .b-unsub { background: #fcebeb; color: #a32d2d; }
+  .b-critical { background: #d85a30; color: #fff; }
+
+  /* SCORE PIPS */
+  .score-bar { display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+  .score-label { font-size: 10px; color: var(--text-tertiary); }
+  .pip { width: 5px; height: 5px; border-radius: 50%; background: #e0ddd8; }
+  .pip.on { background: var(--teal); }
+  .pip.on-r { background: var(--coral); }
+  .pip.on-a { background: var(--amber); }
+
+  /* ACTION ROW */
+  .action-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .btn { font-size: 11px; padding: 5px 11px; border-radius: 6px; border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); transition: background 0.12s; }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn.primary { background: var(--bg-info); border-color: var(--border-info); color: var(--text-info); }
+  .btn.primary:hover { background: #d0e8f8; }
+
+  /* AGENT NOTE */
+  .agent-note { display: flex; align-items: flex-start; gap: 8px; padding: 9px 12px; background: var(--bg-secondary); border-radius: var(--radius-md); margin: 4px 0 8px 56px; }
+  .agent-note-icon { font-size: 11px; color: var(--text-tertiary); flex-shrink: 0; margin-top: 1px; }
+  .agent-note-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .agent-note-link { color: var(--text-info); cursor: pointer; text-decoration: none; }
+
+  /* SUPPRESS ROWS */
+  .sup-card { background: var(--bg-primary); border: 0.5px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 11px 16px; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; opacity: 0.72; transition: opacity 0.15s; }
+  .sup-card:hover { opacity: 1; }
+  .sup-card.active { opacity: 1; border-color: var(--border-mid); }
+  .sup-sender { font-size: 12px; color: var(--text-secondary); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sup-count { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+  .sup-actions { display: flex; gap: 5px; flex-shrink: 0; }
+
+  /* SETTINGS */
+  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 0.5px solid var(--border-subtle); }
+  .settings-label { font-size: 13px; color: var(--text-primary); }
+  .settings-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .toggle { width: 36px; height: 20px; border-radius: 10px; background: var(--teal); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+  .toggle::after { content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%; background: white; top: 2px; right: 2px; transition: right 0.2s; }
+  .toggle.off { background: var(--border-mid); }
+  .toggle.off::after { right: 18px; }
+  .threshold-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 12px; }
+  .threshold-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px; text-align: center; }
+  .threshold-n { font-size: 24px; font-weight: 600; color: var(--text-primary); }
+  .threshold-label { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
+  .section-label-plain { font-size: 11px; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.4px; text-transform: uppercase; margin: 1.2rem 0 0.6rem; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo"><div class="logo-dot"></div>Quiet</div>
+    <div class="account-pill">All accounts (3) ▾</div>
+  </div>
+  <div class="topbar-right">
+    <div class="agent-status"><div class="pulse"></div>Agent running</div>
+    <div class="last-run">Last scan: 4 min ago</div>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="stat"><div class="stat-label">Needs your attention</div><div class="stat-value v-act">4</div></div>
+  <div class="stat"><div class="stat-label">Handled by agent</div><div class="stat-value v-handled">18</div></div>
+  <div class="stat"><div class="stat-label">Suppressed today</div><div class="stat-value v-suppressed">61</div></div>
+  <div class="stat"><div class="stat-label">Unsubscribed this week</div><div class="stat-value" style="color:var(--text-secondary)">7</div></div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab('act',this)">Act <span style="font-size:11px;color:var(--text-tertiary);font-weight:400">4</span></div>
+  <div class="tab" onclick="showTab('handled',this)">Handled <span style="font-size:11px;color:var(--text-tertiary);font-weight:400">18</span></div>
+  <div class="tab" onclick="showTab('suppressed',this)">Suppressed <span style="font-size:11px;color:var(--text-tertiary);font-weight:400">61</span></div>
+  <div class="tab" onclick="showTab('settings',this)">Agent settings</div>
+</div>
+
+<div class="main">
+
+  <!-- ACT -->
+  <div id="tab-act" class="tab-content active">
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-act"></span>Needs reply</div>
+      <div class="section-count">2 items</div>
+    </div>
+
+    <div class="card urgent" onclick="toggleActions(this)">
+      <div class="avatar av-red">DM</div>
+      <div class="card-body">
+        <div class="card-from">David Mitchell <span class="badge b-critical">Critical</span></div>
+        <div class="card-subject">Re: AWS migration sign-off — need decision by EOD</div>
+        <div class="card-preview">Hi Chris, circling back on this — legal need the green light before 5pm today or we push...</div>
+        <div class="score-bar">
+          <span class="score-label">Importance</span>
+          <span class="pip on-r"></span><span class="pip on-r"></span><span class="pip on-r"></span><span class="pip on-r"></span><span class="pip on-r"></span>
+          <span class="score-label" style="margin-left:6px">Deadline detected</span>
+        </div>
+        <div class="action-row" style="display:none">
+          <button class="btn primary">Draft reply</button>
+          <button class="btn">Snooze 1hr</button>
+          <button class="btn">Delegate</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">09:41</div>
+        <div class="badge b-act">Reply needed</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleActions(this)">
+      <div class="avatar av-blue">SC</div>
+      <div class="card-body">
+        <div class="card-from">Sarah Chen</div>
+        <div class="card-subject">Quarterly review — can you present Thursday?</div>
+        <div class="card-preview">We've had a slot open up at 2pm on Thursday. Would you be able to cover the infrastructure...</div>
+        <div class="score-bar">
+          <span class="score-label">Importance</span>
+          <span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span>
+        </div>
+        <div class="action-row" style="display:none">
+          <button class="btn primary">Confirm yes</button>
+          <button class="btn">Suggest alternative</button>
+          <button class="btn">Snooze</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">08:17</div>
+        <div class="badge b-act">Reply needed</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-act"></span>Review required</div>
+      <div class="section-count">2 items</div>
+    </div>
+
+    <div class="card" onclick="toggleActions(this)">
+      <div class="avatar av-gray">HR</div>
+      <div class="card-body">
+        <div class="card-from">HMRC</div>
+        <div class="card-subject">Your Self Assessment — action required by 31 January</div>
+        <div class="card-preview">Your tax return for the year ending 5 April 2025 is due. Log in to your Government Gateway...</div>
+        <div class="score-bar">
+          <span class="score-label">Importance</span>
+          <span class="pip on-a"></span><span class="pip on-a"></span><span class="pip on-a"></span><span class="pip on-a"></span><span class="pip on-a"></span>
+          <span class="score-label" style="margin-left:6px">Govt sender · Deadline</span>
+        </div>
+        <div class="action-row" style="display:none">
+          <button class="btn primary">Open original</button>
+          <button class="btn">Snooze 1 week</button>
+          <button class="btn">Mark done</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Yesterday</div>
+        <div class="badge b-deadline">Deadline</div>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleActions(this)">
+      <div class="avatar av-teal">BA</div>
+      <div class="card-body">
+        <div class="card-from">Barclays</div>
+        <div class="card-subject">Statement available — March 2026</div>
+        <div class="card-preview">Your monthly statement is ready to view. No action required unless you spot anything unusual...</div>
+        <div class="score-bar">
+          <span class="score-label">Importance</span>
+          <span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span>
+          <span class="score-label" style="margin-left:6px">Financial sender</span>
+        </div>
+        <div class="action-row" style="display:none">
+          <button class="btn primary">Open statement</button>
+          <button class="btn">Archive</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-time">Yesterday</div>
+        <div class="badge b-fyi">FYI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HANDLED -->
+  <div id="tab-handled" class="tab-content">
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-handled"></span>Auto-replied</div>
+      <div class="section-count">3 items</div>
+    </div>
+
+    <div class="card">
+      <div class="avatar av-gray">RB</div>
+      <div class="card-body">
+        <div class="card-from">Robert Barnes</div>
+        <div class="card-subject">Quick question on Tuesday's standup time</div>
+        <div class="card-preview">Replied: "Yes, Tuesday standup remains at 9:30am — see you then."</div>
+      </div>
+      <div class="card-meta"><div class="card-time">10:02</div><div class="badge b-handled">Auto-replied</div></div>
+    </div>
+    <div class="agent-note">
+      <div class="agent-note-icon">↳</div>
+      <div class="agent-note-text">Robert has asked this twice before. Reply was templated from your previous response on 14 Mar. <a class="agent-note-link">Review reply</a></div>
+    </div>
+
+    <div class="card">
+      <div class="avatar av-green">TM</div>
+      <div class="card-body">
+        <div class="card-from">Teams notification</div>
+        <div class="card-subject">You were mentioned in #cloud-ops</div>
+        <div class="card-preview">Archived — Teams notifications routed to Teams app per your preference</div>
+      </div>
+      <div class="card-meta"><div class="card-time">09:55</div><div class="badge b-handled">Archived</div></div>
+    </div>
+
+    <div class="card">
+      <div class="avatar av-blue">LI</div>
+      <div class="card-body">
+        <div class="card-from">LinkedIn</div>
+        <div class="card-subject">You have 3 new connection requests</div>
+        <div class="card-preview">Archived — LinkedIn digests suppressed per rule</div>
+      </div>
+      <div class="card-meta"><div class="card-time">08:30</div><div class="badge b-handled">Archived</div></div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-handled"></span>Forwarded / routed</div>
+      <div class="section-count">2 items</div>
+    </div>
+
+    <div class="card">
+      <div class="avatar av-red">IT</div>
+      <div class="card-body">
+        <div class="card-from">IT Helpdesk</div>
+        <div class="card-subject">Ticket #4821 — VPN issue resolved</div>
+        <div class="card-preview">Forwarded to your personal task list and marked resolved</div>
+      </div>
+      <div class="card-meta"><div class="card-time">07:44</div><div class="badge b-handled">Logged</div></div>
+    </div>
+    <div class="agent-note">
+      <div class="agent-note-icon">↳</div>
+      <div class="agent-note-text">Added to your task list and marked resolved automatically.</div>
+    </div>
+  </div>
+
+  <!-- SUPPRESSED -->
+  <div id="tab-suppressed" class="tab-content">
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-sup"></span>Permanently muted</div>
+      <div class="section-count">12 senders</div>
+    </div>
+
+    <div class="sup-card">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">PB</div>
+      <div class="sup-sender">Purplebricks · no-reply@purplebricks.com</div>
+      <div class="sup-count">23 ignored</div>
+      <div class="badge b-fyi">Muted</div>
+    </div>
+    <div class="sup-card">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">OD</div>
+      <div class="sup-sender">ODEON Cinemas · promotions@odeon.co.uk</div>
+      <div class="sup-count">18 ignored</div>
+      <div class="badge b-fyi">Muted</div>
+    </div>
+    <div class="sup-card">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">×6</div>
+      <div class="sup-sender">Various SaaS trial emails (6 senders)</div>
+      <div class="sup-count">44 blocked</div>
+      <div class="badge b-fyi">Muted</div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-sup"></span>Unsubscribe candidates</div>
+      <div class="section-count">5 senders — agent suggests action</div>
+    </div>
+
+    <div class="sup-card active">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">WS</div>
+      <div class="sup-sender">Which? Magazine · offers@which.co.uk</div>
+      <div class="sup-count">11 unread</div>
+      <div class="sup-actions">
+        <button class="btn primary" style="font-size:10px;padding:3px 8px">Unsubscribe</button>
+        <button class="btn" style="font-size:10px;padding:3px 8px">Keep</button>
+      </div>
+    </div>
+    <div class="sup-card active">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">AM</div>
+      <div class="sup-sender">Amazon marketing · store-news@amazon.co.uk</div>
+      <div class="sup-count">9 unread</div>
+      <div class="sup-actions">
+        <button class="btn primary" style="font-size:10px;padding:3px 8px">Unsubscribe</button>
+        <button class="btn" style="font-size:10px;padding:3px 8px">Keep</button>
+      </div>
+    </div>
+    <div class="sup-card active">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">EV</div>
+      <div class="sup-sender">Eventbrite · noreply@eventbrite.co.uk</div>
+      <div class="sup-count">8 unread</div>
+      <div class="sup-actions">
+        <button class="btn primary" style="font-size:10px;padding:3px 8px">Unsubscribe</button>
+        <button class="btn" style="font-size:10px;padding:3px 8px">Keep</button>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title"><span class="dot dot-sup"></span>Auto-unsubscribed this week</div>
+      <div class="section-count">7 senders</div>
+    </div>
+    <div class="sup-card">
+      <div class="avatar av-gray" style="width:30px;height:30px;font-size:10px;flex-shrink:0">×7</div>
+      <div class="sup-sender">Retail promotion senders (7 total)</div>
+      <div class="sup-count">20+ ignored each</div>
+      <div class="badge b-unsub">Auto-unsubscribed</div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="tab-settings" class="tab-content">
+    <div class="section-label-plain">Ignore thresholds</div>
+    <div class="threshold-grid">
+      <div class="threshold-card"><div class="threshold-n">5</div><div class="threshold-label">unread → mute</div></div>
+      <div class="threshold-card"><div class="threshold-n">10</div><div class="threshold-label">unread → suggest unsub</div></div>
+      <div class="threshold-card"><div class="threshold-n">20</div><div class="threshold-label">unread → auto-unsub</div></div>
+    </div>
+    <div style="margin-top:1.25rem">
+      <div class="settings-row">
+        <div><div class="settings-label">Auto-reply to scheduling requests</div><div class="settings-sub">Agent replies when it can infer your answer from context</div></div>
+        <div class="toggle" onclick="this.classList.toggle('off')"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Auto-archive social notifications</div><div class="settings-sub">LinkedIn, Twitter/X, Teams mentions</div></div>
+        <div class="toggle" onclick="this.classList.toggle('off')"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Auto-unsubscribe at 20 ignores</div><div class="settings-sub">Requires List-Unsubscribe header to be present</div></div>
+        <div class="toggle" onclick="this.classList.toggle('off')"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Daily digest at 8am</div><div class="settings-sub">Email summary if you haven't opened Quiet</div></div>
+        <div class="toggle off" onclick="this.classList.toggle('off')"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Protected senders</div><div class="settings-sub">Always surface — never suppress or auto-reply</div></div>
+        <button class="btn" style="font-size:12px">Manage</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(name, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+function toggleActions(card) {
+  var rows = card.querySelectorAll('.action-row');
+  rows.forEach(function(r){ r.style.display = r.style.display === 'none' ? 'flex' : 'none'; });
+}
+</script>
+</body>
+</html>
