@@ -1,0 +1,37 @@
+# Environment
+.env
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# MSAL token cache
+.token_cache.json
+token_cache.bin
+msal_token_cache.json
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Node (for any JS tooling)
+node_modules/
+
+# Logs
+*.log.token_cache.json
