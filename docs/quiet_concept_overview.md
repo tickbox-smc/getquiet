@@ -1,136 +1,99 @@
 # Quiet
 ## Your inbox, without the inbox.
 
----
-
-> Email is broken. Nobody talks about fixing it correctly.
-
-Most people receive 50–150 emails a day. They open their inbox, scan the noise, miss what matters, and feel vaguely anxious about what they didn't get to.
-
-Existing solutions — smarter inboxes, keyboard shortcuts, AI drafting — make the same experience faster. They don't change the experience.
-
-Quiet does something different. It removes the inbox entirely and replaces it with a decision interface. You don't scan messages. You see what needs you, what was handled, and what was silenced — and nothing else.
+*Concept overview — March 2026 — for early feedback only, not for distribution*
 
 ---
 
-## Three things Quiet does
+## The problem
 
-**Act** — Surfaces only what needs a human decision. Everything else is handled or gone.
+Email has become overwhelming. Nobody talks about fixing it properly.
 
-**Handle** — Replies, archives, logs, and routes email autonomously — and explains every decision.
+Most people receive 50–150 emails a day. They open their inbox, scroll through the noise, miss what matters, and feel vaguely anxious about what they didn't get to.
 
-**Suppress** — Mutes, unsubscribes, and auto-removes senders you repeatedly ignore.
+Basic junk filters catch the obvious stuff. But they don't understand what matters *to you*. The real problem isn't spam — it's everything else.
 
----
+Tools built for power users don't help everyone else. Existing solutions make the same experience faster. They don't change the experience.
 
-## The problem with email today
-
-Every productivity tool built around email assumes the same mental model: open your inbox, process what's inside, feel better. The inbox is the workspace.
-
-This model has three fundamental problems.
-
-### 01 — Volume is a UI problem, not a filtering problem
-
-- Spam filters and smart folders reduce count but not cognitive load.
-- You still open a list. You still scan. You still decide what to skip.
-- The act of opening your inbox is itself the failure mode.
-
-### 02 — AI assistance still requires the human to be present
-
-- Superhuman, Copilot, and Shortwave make you faster at processing email.
-- They do not process email without you.
-- You are still the operator. The inbox is still your workspace.
-
-### 03 — Unsubscribe is manual and reactive
-
-- You have to notice a sender, decide to act, find the link, and click it.
-- Most people never do. Noise accumulates silently over years.
-- No product learns from your ignoring behaviour and acts on it for you.
-
-### What people actually want
-
-- To know if anything needs them — without opening a list.
-- To trust that important things will never be missed.
-- To stop thinking about email entirely.
+Quiet does something different.
 
 ---
 
-## How Quiet works
+## What Quiet is
 
-Quiet runs a continuous agent loop against your mailbox. You never interact with email directly.
+Quiet is a decision interface that replaces the inbox experience entirely.
 
-**The pipeline:**
+Instead of scanning through hundreds of messages, you see a short, prioritised list of what needs your attention. The Quiet AI assistant has already read everything, scored it by importance, and sorted it into three categories:
 
-`Ingest` → `Score` → `Route` → `Learn`
+- **Act** — emails that genuinely need something from you
+- **Handled** — emails that have been dealt with automatically, with a clear explanation of why
+- **Suppressed** — newsletters, promotions, and recurring senders you've repeatedly ignored
 
-- **Ingest** — All accounts polled every 5 minutes.
-- **Score** — Sender importance and actionability calculated for every message.
-- **Route** — Each email is assigned to Act, Handle, or Suppress.
-- **Learn** — Behavioural patterns updated continuously from your interactions.
-
-### The scoring engine
-
-Every email receives two scores, calculated from behavioural signals:
-
-**Sender importance score**
-- Boss, colleagues → Critical
-- Banks, government → High
-- Newsletters → Low
-- Retail marketing → Suppress
-
-**Actionability score**
-- Needs reply
-- Contains deadline
-- Contains attachment
-- FYI only / Promotional
-
-### Ignore threshold logic
-
-| Ignores | Action | Detail |
-|---------|--------|--------|
-| 5 | Mute | Sender disappears from all views until you re-enable. |
-| 10 | Suggest unsubscribe | Quiet surfaces the sender for a one-tap unsubscribe decision. |
-| 20 | Auto-unsubscribe | Quiet unsubscribes automatically (requires List-Unsubscribe header). |
-
-### The agent note
-
-Every autonomous action includes a plain-English explanation of why it was taken. Trust through transparency.
+Every decision the assistant makes is explained. You always know why something was surfaced or silenced. You stay in control — the assistant just removes the mental effort of working out what to read first.
 
 ---
 
-## Market opportunity & next steps
+## How it works
 
-### Competitive landscape
+**Connect** — Quiet connects to your existing Outlook or Gmail account. Your emails stay exactly where they are. Nothing is deleted or moved without your say-so.
 
-| Product | Removes inbox? | Autonomous? | Learns ignores? | Explains actions? |
-|---------|---------------|-------------|-----------------|-------------------|
-| Gmail / Outlook | No | No | No | No |
-| Superhuman | No | No | No | No |
-| SaneBox | No | Partial | No | No |
-| Lindy | No | Partial | No | No |
-| **Quiet** | **Yes** | **Yes** | **Yes** | **Yes** |
+**Learn** — The assistant learns what matters to you over time. It watches what you open, what you reply to, what you ignore, and adjusts its scoring accordingly.
 
-### Why now
+**Surface** — Important emails reach you quickly. Everything else is either handled automatically or silenced, and a brief summary tells you what happened.
 
-- **LLM capability** — Sender classification, actionability detection, and auto-reply are all solvable with current models at acceptable cost.
-- **Microsoft Graph API** — Single API covers Outlook and M365 — the dominant email platform in professional life.
-- **Agent infrastructure** — Platforms like AgentMail (YC S25, $6M seed) prove the market is ready for email-native agents.
-- **Universal pain** — Email overload affects every knowledge worker. The TAM is not niche.
+**Act** — You see a short list. You act on it. Then you close the app. That's it.
 
-### Prototype roadmap
+---
 
-**Phase 1 — UI prototype**
-Decision interface with mocked data. Validate concept with 5–10 people.
+## The agent note
+
+The single biggest differentiator in Quiet is what we call the *agent note* — a short explanation attached to every decision the assistant makes.
+
+This is what builds trust. Users don't just see that an email was suppressed. They see *why*. "Suppressed — you've ignored 14 emails from this sender this year." Or: "Flagged urgent — same sender as your last invoice conversation."
+
+No other tool on the market does this consistently. It's the thing that turns a black-box AI tool into something people are willing to give real authority to.
+
+---
+
+## Prototype roadmap
+
+**Phase 1 — UI prototype** *(complete)*
+Decision interface with realistic data. Currently being tested with a small group to validate the concept.
 
 **Phase 2 — Live inbox**
-Connect Microsoft Graph API. Score real emails from M365 and Outlook.
+Connect Microsoft Graph API. Score real emails from Outlook and M365. Demo-ready with real data.
 
 **Phase 3 — Agent actions**
-Auto-archive, auto-reply, unsubscribe. Behavioural learning loop.
+Auto-archive, auto-reply, unsubscribe. Behavioural learning loop begins.
 
 **Phase 4 — SaaS evaluation**
-Onboard 10 beta users. Measure open rate vs. inbox open rate.
+Onboard 10 beta users. Measure decisions made per session vs time saved.
 
 ---
 
-*Quiet is a prototype concept. This document is for early feedback only — not for distribution.*
+## Who it's for
+
+Quiet is for anyone whose inbox has started to feel like a burden rather than a tool.
+
+- Small business owners who can't afford to miss a client but can't live in their inbox
+- Consultants and freelancers whose pipeline runs through email
+- Professionals managing high volumes of internal and external communication
+- Anyone who opens their email with a feeling of dread
+
+The product is deliberately designed to be usable by non-technical people. The interface requires no setup, no rules to configure, and no ongoing management. You connect it, and it learns.
+
+---
+
+## What we're looking for
+
+We're seeking 5–10 people to look at the prototype and give honest feedback. We want to know:
+
+- Does this describe a problem you actually have?
+- Would you trust an AI assistant with your inbox?
+- What would need to be true for you to use this?
+
+No commitment required. Your feedback shapes what gets built next.
+
+---
+
+*Quiet is a prototype concept by Tickbox SMC Limited. This document is for early feedback only — not for distribution.*
