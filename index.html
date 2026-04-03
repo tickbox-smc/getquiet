@@ -134,10 +134,13 @@
       <iframe
         class="tally-embed"
         data-tally-src="https://tally.so/embed/KYLgdk?alignLeft=1&hideTitle=1&transparentBackground=1"
-        style="height: 2600px;"
+        width="100%"
+        style="height: 3200px;"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
         title="Quiet Feedback Form"
-        loading="lazy"
-        allowfullscreen>
+        loading="lazy">
       </iframe>
     </div>
 
@@ -148,7 +151,7 @@
     <p style="margin-top: 8px;">© 2026 Chris Falck &nbsp;·&nbsp; <a href="mailto:chris@getquiet.co.uk">chris@getquiet.co.uk</a></p>
   </footer>
 
-  <script async src="https://tally.so/widgets/embed.js"></script>
+  <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
 
 </body>
 </html>
