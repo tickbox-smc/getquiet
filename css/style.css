@@ -618,22 +618,83 @@ footer a { color: var(--ink-soft); }
 .d5 { animation-delay: 0.33s; }
 .d6 { animation-delay: 0.40s; }
 
+/* ── HAMBURGER BUTTON ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  width: 36px;
+  height: 36px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+/* Animate to X when open */
+.nav-open .nav-hamburger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-open .nav-hamburger span:nth-child(2) {
+  opacity: 0;
+}
+.nav-open .nav-hamburger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ── MOBILE ── */
 @media (max-width: 600px) {
+
+  /* Show hamburger, hide inline links */
+  .nav-hamburger { display: flex; }
   .nav-links {
-    gap: 12px;
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: rgba(247, 245, 242, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    flex-direction: column;
+    padding: 16px 24px 20px;
+    gap: 0;
+    z-index: 99;
   }
-  .nav-links a:not(.nav-cta) {
-    font-size: 0.78rem;
+  .nav-open .nav-links { display: flex; }
+  .nav-links a {
+    font-size: 1rem;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
   }
+  .nav-links a:last-child { border-bottom: none; }
   .nav-links a.nav-cta {
-    padding: 6px 11px;
-    font-size: 0.78rem;
+    background: none;
+    color: var(--accent);
+    padding: 12px 0;
+    border-radius: 0;
+    font-weight: 500;
   }
+
+  /* Content */
   .card, .voice-section, .feedback-section,
   .hearing-section, .status-card, .contact-card { padding: 20px 18px; }
   .btn { font-size: 0.82rem; padding: 9px 14px; }
   .how-section h2, .about-section h2 { font-size: 1.3rem; }
   .proto-card { flex-direction: column; align-items: flex-start; }
   .status-label { min-width: 110px; }
+
+  /* Form taller on mobile — fields stack more on small screens */
+  .tally-embed { height: 3400px !important; }
 }
