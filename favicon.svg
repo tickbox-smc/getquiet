@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <style>
+    .q { stroke: #1a1a18; }
+    @media (prefers-color-scheme: dark) { .q { stroke: #e8e6e0; } }
+  </style>
+  <circle class="q" cx="13" cy="13" r="9" stroke-width="2"/>
+  <line class="q" x1="22" y1="13" x2="22" y2="27" stroke-width="2" stroke-linecap="round"/>
+</svg>

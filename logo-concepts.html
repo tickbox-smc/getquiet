@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet — Logo Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --text: #1a1a18;
+    --muted: #888880;
+    --mark: #1a1a18;
+    --selected-border: #1a1a18;
+    --selected-bg: #f0ede8;
+  }
+  .dark {
+    --bg: #111110;
+    --surface: #1c1c1a;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e6e0;
+    --muted: #666660;
+    --mark: #e8e6e0;
+    --selected-border: #e8e6e0;
+    --selected-bg: #242420;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    transition: background .3s, color .3s;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 40px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: var(--text);
+  }
+
+  .toggle-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: color .2s, border-color .2s;
+  }
+  .toggle-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+  }
+
+  .prompt {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 36px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .subprompt {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    margin-bottom: 52px;
+  }
+
+  .concepts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .concepts { grid-template-columns: 1fr; }
+    header { padding: 20px 24px; }
+    main { padding: 40px 24px 60px; }
+    .prompt { font-size: 28px; }
+  }
+
+  .concept {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 20px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s;
+    user-select: none;
+  }
+  .concept:hover { border-color: var(--muted); transform: translateY(-1px); }
+  .concept.chosen {
+    border: 1.5px solid var(--selected-border);
+    background: var(--selected-bg);
+  }
+
+  .mark-wrap {
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .mark-wrap svg { transition: opacity .2s; }
+
+  .concept-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 26px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .concept-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .choose-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 18px;
+    cursor: pointer;
+    width: 100%;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .concept:hover .choose-btn { color: var(--text); border-color: var(--muted); }
+  .concept.chosen .choose-btn {
+    color: var(--text);
+    border-color: var(--selected-border);
+    background: transparent;
+  }
+
+  .result {
+    min-height: 52px;
+    text-align: center;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .result.visible { opacity: 1; }
+  .result-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .result-sub {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  .favicon-strip {
+    border-top: 0.5px solid var(--border);
+    padding-top: 36px;
+    margin-top: 8px;
+  }
+  .strip-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .favicons {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .fav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+  }
+  .fav-box {
+    background: #ffffff;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .fav-size { font-size: 10px; color: var(--muted); letter-spacing: 0.04em; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    border-top: 0.5px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">quiet</div>
+  <button class="toggle-btn" onclick="toggleDark()" id="darkBtn">Dark mode</button>
+</header>
+
+<main>
+  <p class="prompt">Which mark feels right?</p>
+  <p class="subprompt">Three directions for the Quiet logo. Pick your instinct — no overthinking.</p>
+
+  <div class="concepts">
+
+    <div class="concept" id="c1" onclick="choose(1)">
+      <div class="mark-wrap">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <circle cx="36" cy="36" r="22" stroke="var(--mark)" stroke-width="2"/>
+          <line x1="20" y1="36" x2="52" y2="36" stroke="var(--mark)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="concept-name">quiet</div>
+      <div class="concept-label">Silence</div>
+      <button class="choose-btn" id="btn1">This one</button>
+    </div>
+
+    <div class="concept" id="c2" onclick="choose(2)">
+      <div class="mark-wrap">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <circle cx="31" cy="30" r="15" stroke="var(--mark)" stroke-width="2"/>
+          <line x1="46" y1="30" x2="46" y2="55" stroke="var(--mark)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="concept-name">quiet</div>
+      <div class="concept-label">Q mark</div>
+      <button class="choose-btn" id="btn2">This one</button>
+    </div>
+
+    <div class="concept" id="c3" onclick="choose(3)">
+      <div class="mark-wrap">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <line x1="18" y1="20" x2="18" y2="54" stroke="var(--mark)" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="36" y1="30" x2="36" y2="54" stroke="var(--mark)" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="54" y1="40" x2="54" y2="54" stroke="var(--mark)" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="concept-name">quiet</div>
+      <div class="concept-label">Fade</div>
+      <button class="choose-btn" id="btn3">This one</button>
+    </div>
+
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-text" id="resultText"></div>
+    <div class="result-sub" id="resultSub"></div>
+  </div>
+
+  <div class="favicon-strip">
+    <div class="strip-label">At browser favicon size</div>
+    <div class="favicons" id="favicons"></div>
+  </div>
+
+</main>
+
+<footer>quiet — pre-commercial prototype &nbsp;·&nbsp; getquiet.co.uk</footer>
+
+<script>
+var chosen = 0;
+var dark = false;
+
+var labels = {
+  1: ['Silence', 'A circle containing a horizontal dash — calm, still, contained.'],
+  2: ['Q mark', 'The letter Q as a two-element geometric mark — direct and distinctive.'],
+  3: ['Fade', 'Three bars descending to silence — the noise stopping.']
+};
+
+var favSVGs = {
+  1: function(s,sw){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="#1a1a1a" stroke-width="'+sw+'"/><line x1="8" y1="16" x2="24" y2="16" stroke="#1a1a1a" stroke-width="'+sw+'" stroke-linecap="round"/></svg>';},
+  2: function(s,sw){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none"><circle cx="14" cy="13" r="7" stroke="#1a1a1a" stroke-width="'+sw+'"/><line x1="21" y1="13" x2="21" y2="25" stroke="#1a1a1a" stroke-width="'+sw+'" stroke-linecap="round"/></svg>';},
+  3: function(s,sw){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none"><line x1="7" y1="7" x2="7" y2="25" stroke="#1a1a1a" stroke-width="'+sw+'" stroke-linecap="round"/><line x1="16" y1="13" x2="16" y2="25" stroke="#1a1a1a" stroke-width="'+sw+'" stroke-linecap="round"/><line x1="25" y1="19" x2="25" y2="25" stroke="#1a1a1a" stroke-width="'+sw+'" stroke-linecap="round"/></svg>';}
+};
+
+function choose(n) {
+  chosen = n;
+  for (var i=1;i<=3;i++) {
+    var el = document.getElementById('c'+i);
+    var btn = document.getElementById('btn'+i);
+    if (i===n) {
+      el.classList.add('chosen');
+      btn.textContent = 'Selected';
+    } else {
+      el.classList.remove('chosen');
+      btn.textContent = 'This one';
+    }
+  }
+  var r = document.getElementById('result');
+  document.getElementById('resultText').textContent = labels[n][0];
+  document.getElementById('resultSub').textContent = labels[n][1];
+  r.classList.add('visible');
+
+  var sizes = [[64,2],[32,1.5],[16,1.5]];
+  var html = sizes.map(function(pair){
+    var s=pair[0],sw=pair[1];
+    return '<div class="fav-item"><div class="fav-box" style="width:'+s+'px;height:'+s+'px;">'+favSVGs[n](s,sw)+'</div><div class="fav-size">'+s+'</div></div>';
+  }).join('');
+  document.getElementById('favicons').innerHTML = html;
+}
+
+function toggleDark() {
+  dark = !dark;
+  document.body.classList.toggle('dark', dark);
+  document.getElementById('darkBtn').textContent = dark ? 'Light mode' : 'Dark mode';
+}
+
+choose(2);
+</script>
+</body>
+</html>
