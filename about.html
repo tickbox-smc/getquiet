@@ -21,9 +21,10 @@
       </button>
       <div class="nav-links">
         <a href="/how-it-works.html">How it works</a>
-        <a href="/prototypes.html">Prototypes</a>
+        <a href="/quiet-protect.html">Quiet Protect</a>
+        <a href="/quiet.html">Quiet</a>
         <a href="/about.html" class="active">About</a>
-        <a href="/#feedback" class="nav-cta">Share your thoughts</a>
+        <a href="https://tally.so/r/0QJkjy" class="nav-cta" target="_blank" rel="noopener">Get access</a>
       </div>
     </div>
   </nav>
@@ -73,7 +74,7 @@
     <!-- WHAT STAGE THIS IS AT -->
     <div class="about-section fade-up d4">
       <h2>What stage this is at</h2>
-      <p>This is a pre-commercial prototype. There are no paying users, no live accounts, no terms of service. What exists is:</p>
+      <p>This is pre-commercial. There are no paying users, no live accounts, no terms of service. What exists is:</p>
 
       <div class="status-card">
         <h3>What's built</h3>
@@ -83,19 +84,27 @@
         </div>
         <div class="status-row">
           <span class="status-label"><span class="status-dot"></span>Complete</span>
-          <span class="status-value">Microsoft Graph API integration: live connection to M365 email</span>
+          <span class="status-value">Microsoft Graph API integration: live M365 connection and OAuth</span>
         </div>
         <div class="status-row">
           <span class="status-label"><span class="status-dot"></span>Complete</span>
-          <span class="status-value">Quiet Protect scoring engine: calibrated and stable across 20 test cases</span>
+          <span class="status-value">Quiet Protect scoring engine: calibrated stable across 60 regression runs</span>
         </div>
         <div class="status-row">
-          <span class="status-label"><span class="status-dot amber"></span>Next</span>
-          <span class="status-value">API layer and scheduler: connecting the scoring engine to live email</span>
+          <span class="status-label"><span class="status-dot"></span>Complete</span>
+          <span class="status-value">Quiet scoring engine: calibrated and stable; combined threat and importance scoring</span>
         </div>
         <div class="status-row">
-          <span class="status-label"><span class="status-dot amber"></span>Next</span>
-          <span class="status-value">Live UI: the prototypes wired to real data</span>
+          <span class="status-label"><span class="status-dot"></span>Complete</span>
+          <span class="status-value">Email processing pipeline: fetches, scores, and routes live email</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label"><span class="status-dot"></span>Complete</span>
+          <span class="status-value">Live demo: Quiet Protect running on a real Microsoft 365 inbox</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label"><span class="status-dot amber"></span>In progress</span>
+          <span class="status-value">Quiet Protect notification layer: alert emails to the family manager</span>
         </div>
         <div class="status-row">
           <span class="status-label"><span class="status-dot grey"></span>Later</span>
@@ -103,8 +112,14 @@
         </div>
       </div>
 
-      <p style="margin-top: 20px;">The scoring engine for Quiet Protect has been through 18 iterative versions and a structured calibration process across 20 test cases covering obvious scams, genuine safe emails, boundary cases, false positive candidates, and deliberate edge cases. It produces consistent routing decisions across repeated runs. That's the part of the system that required the most rigour. And it's already done!</p>
-      <p>The remaining work is integration and deployment. That's well-understood engineering. The hard problem, making the AI reasoning reliable enough to be trusted in a safety context is already solved.</p>
+      <p style="margin-top: 20px;">The scoring engine has been through 18 prompt iterations and a structured
+      calibration process across 20 test cases: obvious scams, safe emails,
+      boundary cases, false positive candidates, and deliberate edge cases.
+      Three full regression runs. Sixty from sixty routing decisions correct.
+      That is the part of the system that required the most rigour, and it is done.</p>
+      <p>The pipeline that connects it to a live inbox is also done. The demo at
+      demo.getquiet.co.uk is running against a real Microsoft 365 mailbox with the
+      scoring engine active.</p>
     </div>
 
     <!-- GET IN TOUCH -->
@@ -120,8 +135,8 @@
   </main>
 
   <footer>
-    <p>Quiet is early-stage. Your feedback genuinely shapes what comes next.</p>
-    <p style="margin-top: 8px;">© 2026 Chris Falck &nbsp;·&nbsp; <a href="mailto:chris@getquiet.co.uk">chris@getquiet.co.uk</a></p>
+    <p>Quiet is in active development. Get in touch at <a href="mailto:chris@getquiet.co.uk">chris@getquiet.co.uk</a></p>
+    <p style="margin-top: 8px;">© 2026 Chris Falck &nbsp;·&nbsp; Tickbox SMC Limited</p>
   </footer>
   <script src="/js/site.js"></script>
 
