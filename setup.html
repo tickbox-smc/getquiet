@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set up your Quiet Protect account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    .setup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .field .field-hint {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      margin-top: -2px;
+    }
+
+    .field input {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 14px;
+      width: 100%;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--protect);
+    }
+
+    .field input::placeholder {
+      color: var(--ink-soft);
+      opacity: 0.6;
+    }
+
+    .field input.token-input {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+    }
+
+    .submit-btn {
+      background: var(--protect);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      align-self: flex-start;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #2d4d7a;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-error {
+      display: none;
+      background: #faece7;
+      border: 1px solid #e8c4b6;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      color: #993c1d;
+      line-height: 1.5;
+    }
+
+    /* ── Success state ── */
+    .success-state {
+      display: none;
+    }
+
+    .dashboard-url-box {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      word-break: break-all;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8rem;
+      color: var(--ink);
+      line-height: 1.6;
+      user-select: all;
+    }
+
+    .copy-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .copy-btn {
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: var(--bg);
+      border-color: var(--protect);
+    }
+
+    .copy-confirm {
+      font-size: 0.82rem;
+      color: #0f6e56;
+      display: none;
+    }
+
+    .warning-note {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #faeeda;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: #854f0b;
+      line-height: 1.5;
+      margin: 16px 0;
+    }
+
+    .warning-note svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .confirm-saved-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .confirm-saved-section p {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+    }
+
+    .go-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--protect);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .go-btn.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .go-btn.active:hover {
+      background: #2d4d7a;
+    }
+
+    .saved-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--ink);
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 16px;
+    }
+
+    .saved-checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--protect);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">Quiet<span>.</span></a>
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links">
+        <a href="/how-it-works.html">How it works</a>
+        <a href="/quiet-protect.html">Quiet Protect</a>
+        <a href="/quiet.html">Quiet</a>
+        <a href="/about.html">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header fade-up">
+    <span class="pill-tag">Quiet Protect</span>
+    <h1 class="page-title">Set up your account</h1>
+    <p class="page-subtitle">You'll need the setup link Chris sent you, plus your email address and name.</p>
+  </header>
+
+  <hr class="divider" />
+
+  <main>
+
+    <!-- SETUP FORM -->
+    <div id="form-card" class="card protect fade-up d1">
+
+      <div class="form-error" id="form-error"></div>
+
+      <form class="setup-form" id="setup-form" novalidate>
+
+        <div class="field">
+          <label for="display-name">Your name</label>
+          <span class="field-hint">How you'd like to be addressed in the app.</span>
+          <input
+            type="text"
+            id="display-name"
+            name="display_name"
+            placeholder="Jane Smith"
+            autocomplete="name"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="email">Your email address</label>
+          <span class="field-hint">This is where Quiet Protect will send alerts. Any email provider works.</span>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jane@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="setup-token">Setup token</label>
+          <span class="field-hint">The token from the link you received. Paste it exactly as sent.</span>
+          <input
+            type="text"
+            id="setup-token"
+            name="setup_token"
+            class="token-input"
+            placeholder="eyJ..."
+            autocomplete="off"
+            spellcheck="false"
+            required
+          />
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Create my account</button>
+
+      </form>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="success-card" class="card protect fade-up success-state">
+
+      <p class="section-label">Account created</p>
+
+      <p id="welcome-name" style="font-size: 1rem; margin-bottom: 4px;"></p>
+      <p style="font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0;">
+        Your Quiet Protect account is active. The link below is your permanent dashboard access.
+        Save it somewhere safe &mdash; you will need it every time you log in.
+      </p>
+
+      <div class="dashboard-url-box" id="dashboard-url-display"></div>
+
+      <div class="copy-row">
+        <button class="copy-btn" id="copy-btn" type="button">Copy link</button>
+        <span class="copy-confirm" id="copy-confirm">&#10003; Copied</span>
+      </div>
+
+      <div class="warning-note">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12" y2="17.01"/>
+        </svg>
+        <span>Do not share this link with anyone else. It gives full access to your Quiet Protect manager dashboard.</span>
+      </div>
+
+      <div class="confirm-saved-section">
+        <p>Once you have saved your link, confirm below to continue.</p>
+
+        <label class="saved-checkbox-label">
+          <input type="checkbox" id="saved-checkbox" />
+          I have saved my dashboard link
+        </label>
+
+        <a
+          id="go-btn"
+          class="go-btn"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Go to my dashboard
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Quiet is in active development. Get in touch at <a href="mailto:chris@getquiet.co.uk">chris@getquiet.co.uk</a></p>
+    <p style="margin-top: 8px;">&#169; 2026 Aegient Ltd &nbsp;&#183;&nbsp; Registered in England and Wales &nbsp;&#183;&nbsp; Company No. 17154349</p>
+  </footer>
+
+  <script src="/js/site.js"></script>
+  <script>
+    const API_BASE = 'https://quiet-production.up.railway.app';
+
+    const form       = document.getElementById('setup-form');
+    const submitBtn  = document.getElementById('submit-btn');
+    const formError  = document.getElementById('form-error');
+    const formCard   = document.getElementById('form-card');
+    const successCard = document.getElementById('success-card');
+
+    const welcomeName    = document.getElementById('welcome-name');
+    const urlDisplay     = document.getElementById('dashboard-url-display');
+    const copyBtn        = document.getElementById('copy-btn');
+    const copyConfirm    = document.getElementById('copy-confirm');
+    const savedCheckbox  = document.getElementById('saved-checkbox');
+    const goBtn          = document.getElementById('go-btn');
+
+    let dashboardUrl = '';
+
+    function showError(msg) {
+      formError.textContent = msg;
+      formError.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create my account';
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      formError.style.display = 'none';
+
+      const displayName  = document.getElementById('display-name').value.trim();
+      const email        = document.getElementById('email').value.trim();
+      const setupToken   = document.getElementById('setup-token').value.trim();
+
+      if (!displayName || !email || !setupToken) {
+        showError('Please fill in all three fields before continuing.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating your account\u2026';
+
+      try {
+        const res = await fetch(API_BASE + '/onboarding/manager', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            display_name: displayName,
+            email: email,
+            setup_token: setupToken,
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          dashboardUrl = data.dashboard_url;
+
+          welcomeName.textContent = 'Welcome, ' + displayName + '.';
+          urlDisplay.textContent = dashboardUrl;
+          goBtn.href = dashboardUrl;
+
+          formCard.style.display = 'none';
+          successCard.style.display = 'block';
+
+        } else if (res.status === 400) {
+          const data = await res.json().catch(() => ({}));
+          const detail = data.detail || '';
+          if (detail.toLowerCase().includes('expired')) {
+            showError('Your setup token has expired. Please ask Chris for a new one.');
+          } else if (detail.toLowerCase().includes('invalid')) {
+            showError('The setup token is not valid. Please check you pasted it correctly.');
+          } else if (detail.toLowerCase().includes('mismatch') || detail.toLowerCase().includes('email')) {
+            showError('The email address does not match the one this token was issued for. Please check both fields.');
+          } else {
+            showError('Something went wrong with your setup token. Please ask Chris for a new one.');
+          }
+        } else if (res.status === 409) {
+          showError('An account already exists for this email address. If you need to log in, use the dashboard link you received when your account was first created. If you have lost it, contact Chris.');
+        } else {
+          showError('Something went wrong on our end. Please try again in a moment or contact Chris if this continues.');
+        }
+
+      } catch (err) {
+        showError('Could not reach the Quiet Protect service. Please check your connection and try again.');
+      }
+    });
+
+    copyBtn.addEventListener('click', function () {
+      if (!dashboardUrl) return;
+      navigator.clipboard.writeText(dashboardUrl).then(function () {
+        copyConfirm.style.display = 'inline';
+        copyBtn.textContent = 'Copied';
+        setTimeout(function () {
+          copyConfirm.style.display = 'none';
+          copyBtn.textContent = 'Copy link';
+        }, 2500);
+      }).catch(function () {
+        // Fallback: select the text in the box so the user can copy manually
+        const range = document.createRange();
+        range.selectNodeContents(urlDisplay);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
+    });
+
+    savedCheckbox.addEventListener('change', function () {
+      if (this.checked) {
+        goBtn.classList.add('active');
+      } else {
+        goBtn.classList.remove('active');
+      }
+    });
+  </script>
+
+</body>
+</html>
